@@ -157,16 +157,7 @@ if config('MODE')=="dev":
        
    }
 
-# DATABASES = {
-#     'default': {
-#            'ENGINE': 'django.db.backends.postgresql',
-#            'NAME': get_secret('DB_NAME', 'soconey'),
-#            'USER': get_secret('DB_USER', 'soconey'),
-#            'PASSWORD': get_secret('DB_PASSWORD', 'soconey'),
-#            'HOST': get_secret('DB_HOST' , 'soconey'),
-#            'PORT': 5432,
-#        }
-# }
+
 
 AUTH_USER_MODEL = 'accounts.User'
 

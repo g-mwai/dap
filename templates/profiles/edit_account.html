@@ -1,0 +1,31 @@
+{% extends '../app/profile_base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="col">
+    <div class="container mt-5 mb-5">
+        <div class="spacer"></div>
+        <h2 class=" text-center ">Edit Profile</h2>
+
+  
+      </div>       
+        <form method="post" enctype="multipart/form-data" class="mt-5 ml-3">
+          {% csrf_token %}
+            
+  
+          {{ form.as_p }}
+
+          <button type="submit" class="btn btn-rounded mt-3">Save Changes</button>
+        </form>
+
+        <div class="spacer"></div>
+
+</div>
+
+
+
+
+
+
+
+{% endblock%}

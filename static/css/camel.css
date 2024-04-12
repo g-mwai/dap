@@ -1,0 +1,42 @@
+.wrapper{
+    position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+     width:100%;
+   }
+   .hero-container{
+   position: relative;
+   }
+   .camel{
+       max-width: 340px;
+       height: 225px;
+       margin: auto;
+       position: relative;
+       z-index: 2;
+   }
+   .sun{
+       width: 150px;
+       position: absolute;
+       right: 17%;
+       top: 30px;
+       z-index: 1;
+   }
+   .cloud{
+       width: 115px;
+       position: absolute;
+       left: 17%;
+       top: 125px;
+       z-index: 1;
+   }
+   .top-artwork{
+       margin-bottom: 40px;
+   }
+   .title h1{
+       font-weight: 300;
+       margin: 0;
+       text-align:center;
+       color:#FBB03B;
+       font-weight: 700;
+       font-size: 3.3rem;
+         font-family: 'Montserrat', sans-serif;
+   }

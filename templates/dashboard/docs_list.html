@@ -1,0 +1,57 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+
+{% load static %}
+
+        <div class="content">
+            <div class="container-fluid">
+                
+                <div class="row">
+                 <div class="mx-auto"> <a class="  btn btn-success ml-3" href="{% url 'new_doc'%}">New Doc</a></div>
+
+                    <div class="col-md-12 mt-2">
+                        <div class="card ">
+                            <div class="card-header row">
+                                <h4 class="card-title ml-3">Documents</h4>
+
+                            
+                            </div>
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead class="thead-dark">
+                                                  <tr>
+                                                    <th scope="col">Type</th>
+                                                    <th scope="col">Published</th>
+                                                    <th scope="col">Author</th>
+                                                    <th scope="col">Action</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for doc in docs %}
+                                                  <tr>
+                                                    <td>{{ doc.pol }}</td>
+                                                    <td>{{doc.whenpublished}} Ago</td>
+                                                    <td>{{doc.author}}</td>
+                                                    <td class="text-primary"><a href="{% url 'doc_detail' doc.id %}" class="btn btn-warning px-3">Edit</a></td>
+                                                  </tr>
+                                                 {% endfor%}
+                                                 
+                                                </tbody>
+                                              </table>
+                                             
+                                            </div>
+                                            </div>
+                                         
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+        </div>
+                              
+{% endblock %}

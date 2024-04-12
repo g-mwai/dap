@@ -1,0 +1,136 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  
+ <div class="col feed">
+
+  <div class="container ">
+  <ul class="tabs-bar text-center pt-2">
+    <li id="tab1" class="tab tab-active"><b>My Inbox</b></li>
+    <li id="tab2" class="tab"> <b>Friends</b></li>
+
+  </ul>
+   
+  <div class="input-group main-search mt-1 ">
+
+
+  </div>
+  <div class="content-container">
+    <div class="content content-tab1 content-active">
+
+      <div class="app--feed">
+
+        <div class="chat-object ml-4 mt-3">
+            <div class="row">
+            <div class="account-avatar">
+              <img src="{% static 'img/avatar.jpg'%}" c alt="">
+            </div>
+            <div class="user-details ml-3">
+              <p><b>John Smith</b></p>
+              <p >Lorem ipsum solot doloret Lorem ipsum ..</p>
+            </div>
+            <div class="follow-btn ml-3">
+               <div class="">11:10 am</div> 
+               <div class="">6</div>
+            </div>
+        </div>
+          </div>
+
+
+  <!-- END FEED-->
+</div>
+
+    </div>
+    <div class="content content-tab2">
+
+      <div class="app--feed">
+
+    
+
+  <!-- END FEED-->
+</div>
+
+    </div>
+    
+  </div>
+</div>
+    
+    
+
+</div>
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto">
+          <p>Post 1 </p>
+          <hr>
+          <form method="POST" class="text-center ">
+            {% csrf_token %}
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Describe your product</label><br>
+              
+              {{ sell_form.about}}
+            </div>
+          
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Display price</label><br>
+              
+              {{ sell_form.display_price}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Price limit</label><br>
+              
+              {{ sell_form.price_limit}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Product location</label><br>
+              
+              {{ sell_form.product_location}}
+            </div>
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Product condition</label><br>
+              
+              {{ sell_form.product_condition}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Pick up</label><br>
+              
+              {{ sell_form.product_pick_up}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Payment method</label><br>
+              
+              {{ sell_form.payment_method}}
+            </div>
+
+          <br>
+          
+           <button type="submit" class="btn btn-dark px-5 ">Post</button>
+            
+         
+          
+           </form>        </div>
+      <div class="modal-footer">
+      
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Feed Ends -->
+{% endblock %}

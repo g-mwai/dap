@@ -1,0 +1,44 @@
+    [DONE] ajax/async reply form
+[DONE] create post models
+[DONE] create post form
+[DONE] upload media form feature
+[DONE] create tag pages
+[DONE] create order Model
+[DONE] create token model
+[DONE] create bid offer model
+[DONE] create gig apply model
+[DONE] async follow 
+[DONE] search feature
+[DONE] login form
+    complex login/signup form + email activation
+    terms & EULA
+    geolocate bids & gigs
+    [ICE] feed algo --- popularity
+[DONE] repost feature
+[DONE] create review model 
+    [ICE] create review forms
+    [ICE] display review
+
+TODAY:
+
+[DONE] dynamic comment form 
+[DONE] count comments
+[DONE] bookmark feature
+[DONE] repost/share feature
+[DONE] subject feature
+[DONE] list who to follow
+[DONE] complete profile edit & display 
+    
+    
+           [ICE] create chat feature
+[DONE] modify post form
+    secondary forms
+[DONE] edit profile
+           [ICE] make offer 
+           [ICE] bid
+        apply
+           
+           [ICE] user can create shop 
+    
+    create notifications on events
+    hidden form for bets

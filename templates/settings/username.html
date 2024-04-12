@@ -1,0 +1,47 @@
+{% extends '../app/profile_base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="col">
+    <div class="container mt-5 mb-5">
+        <div class="spacer"></div>
+        <h2 class=" text-center ">Edit Profile</h2>
+
+  
+      </div>       
+        <form method="post" id="editUsernameForm" enctype="multipart/form-data" class="mt-5 text-center">
+          {% csrf_token %}
+            
+  
+          {{ form.as_p }}
+
+          <button type="submit" class="btn btn-rounded">Save Changes</button>
+        </form>
+
+        <div class="spacer"></div>
+
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="usernameEditModal" tabindex="-1" role="dialog" aria-labelledby="usernameEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mb-3">
+                <!-- Placeholder for success or error message -->
+                <b><div id="usernameEditMessage" class="text-center"></div></b>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock%}

@@ -1,0 +1,1610 @@
+{% load static%}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css'%}">
+    <link rel="stylesheet" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" >
+    <!-- <link rel="stylesheet" href="{% static 'plugins/emojimart/emojimart.css' %}"> -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" >
+
+    <link rel="stylesheet" href="{% static 'css/app_style.css'%}">
+    <!-- <link rel="stylesheet" href="{% static 'css/camel.css'%}"> -->
+
+  
+    <title>Together We Rise</title>
+
+  </head>
+  
+  <nav class="navbar fixed-nav navbar-light  bg-light">
+    <div class="container">
+    <a class="navbar-brand mt-3" href="{% url 'home' %}">
+        <div id="logo">
+            <img src="{% static 'img/logo-dark.png'%}" alt="">
+          
+      </div>
+  
+    </a>
+      <div class="ml-auto ">
+
+     
+        {% if user.is_authenticated %}
+
+
+
+          <a class="profile-dropdown  dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
+            <div class="account-avatar">
+              {% if my_profile.avatar %}
+              <img src="{{ my_profile.avatar.url }}"  id="user-main-avatar">
+              {% else %}
+                  <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+              
+              {%endif%}
+          
+          </div>          
+        </a>
+          <ul class="dropdown-menu profile-dropdown-menu dropdown-menu-right">
+            <li class="dropdown-divider"></li>
+
+            <a href="{% url 'view_profile' user.username %}"> <li class="dropdown-item"><i class="fa-regular fa-user mr-2"></i> Profile</li></a>
+
+            <li class="dropdown-divider"></li>
+            <a href="{% url 'settings' %}"> <li class="dropdown-item"><i class="fa-solid fa-cog mr-2 "></i> Settings</li></a>
+            <li class="dropdown-divider"></li>
+           
+            <a href="{% url 'logout'  %}"> <li class="dropdown-item"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</li></a>
+          </ul>
+          {% else %}
+              <button href="#"  class=" btn btn-outline-danger btn-round px-3  " data-toggle="modal" data-target="#loginModal"   data-toggle="modal" data-target="#AuthModal">
+  
+               Login
+              </button>
+              {%endif%}
+        </div>
+
+    <div class="collapse navbar-collapse" id="main_nav">
+    
+    
+    </div> <!-- navbar-collapse.// -->
+  </div><!-- container //  -->
+  </nav>
+
+ 
+  <body>
+    <!-- Main Body Starts -->
+
+    <div class="container">
+    
+   
+    
+    <div class="row">
+    
+
+
+        <!-- Sidebar Starts -->
+      
+        <div class="col left__rail ">
+          <div class="sidebar mt-2">
+  
+              <div class="mt-4 mr-auto">
+                <div id="logo">
+                  <a href="{% url 'home' %}">
+                    <img src="{% static 'img/logo-dark.png'%}" alt="">
+                  </a>
+              </div>
+          
+              </div>
+              {% if user.is_authenticated %}    
+          <a href="{% url 'home'%}" class="mt-3 sidebar-link sidebar__link {% if request.path == '/home/' %}active-nav{% endif %}" ><div class="sidebar__link">
+           
+              <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/home.png'%}"/></span>
+              
+              <span class="pt-2"><h2 >Home</h2></span>
+            
+            </div>
+          </a>
+          <a href="{% url 'market'%}" class="sidebar-link sidebar__link {% if request.path == '/market/' %}active-nav{% endif %}" ><div class="sidebar__link">
+            <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/shop.png'%}"/></span>
+          <span class="pt-2"><h2>Market</h2></span>
+          </div>
+        </a>
+        
+        <a href="{% url 'my_wallet'%}" class="sidebar-link sidebar__link {% if request.path == '/wallet/my_wallet/' %}active-nav{% endif %}"><div class="sidebar__link">
+          <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/wallet.png'%}"/></span>
+        <span class="pt-2"><h2>Wallet</h2></span>
+        </div></a>
+  
+        <a href="{% url 'view_alerts'%}" class="sidebar-link sidebar__link {% if request.path == '/alerts/' %}active-nav{% endif %}" id="alerts-link"><div class="sidebar__link">
+          <span class="sidebar-icons ml-2">
+        <img src="{% static 'img/icons/notification.png'%}"/></span> {% csrf_token %}       <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
+  
+  
+        <span class="pt-2 ml-2"><h2>Alerts</h2> </span> 
+        </div></a>
+  
+        <a href="{% url 'bookmark_list'%}" class="sidebar-link sidebar__link {% if request.path == '/bookmark_list/' %}active-nav{% endif %}"><div class="sidebar__link">
+              <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/bookmark.png'%}"/></span>
+            <span class="pt-2"><h2>Bookmarks</h2></span>
+            </div>
+          </a>
+          
+  
+            <a href="{% url 'view_profile' user.username %}" class="sidebar-link sidebar__link {% if request.resolver_match.view_name == 'view_profile' and request.resolver_match.kwargs.profile_username == user.username %}active-nav{% endif %}">
+              <div class="sidebar__link">
+                  <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/profile.png'%}"/></span>
+                  <span class="pt-2"><h2>Profile</h2></span>
+              </div>
+          </a>
+            
+  
+          
+  
+            <a href="{% url 'settings'%}" class="sidebar-link sidebar__link {% if request.path == '/settings/' %}active-nav{% endif %}"><div class="sidebar__link">
+              <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/settings.png'%}"/></span>
+            <span class="pt-2"><h2>Settings</h2></span>
+            </div></a>
+  
+            {% else %}
+
+            <a data-toggle="modal" data-target="#loginModal" class="mt-3 sidebar-link sidebar__link " >
+              <div class="sidebar__link">
+             
+                <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/home.png'%}"/></span>
+                
+                <span class="pt-2"><h2 >Home</h2></span>
+              
+              </div>
+            </a>
+            <a href="{% url 'market'%}" class="sidebar-link sidebar__link {% if request.path == '/market/' %}active-nav{% endif %}" ><div class="sidebar__link">
+              <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/shop.png'%}"/></span>
+            <span class="pt-2"><h2>Market</h2></span>
+            </div>
+          </a>
+          <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/wallet/my_wallet/' %}active-nav{% endif %}"><div class="sidebar__link">
+            <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/wallet.png'%}"/></span>
+          <span class="pt-2"><h2>Wallet</h2></span>
+          </div></a>
+
+          <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/alerts/' %}active-nav{% endif %}" id="alerts-link"><div class="sidebar__link">
+            <span class="sidebar-icons ml-2">
+          <img src="{% static 'img/icons/notification.png'%}"/></span> {% csrf_token %}       <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
+    
+    
+          <span class="pt-2 ml-2"><h2>Alerts</h2> </span> 
+          </div></a>
+
+          <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/bookmark_list/' %}active-nav{% endif %}"><div class="sidebar__link">
+            <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/bookmark.png'%}"/></span>
+          <span class="pt-2"><h2>Bookmarks</h2></span>
+          </div>
+        </a>
+
+          <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/wallet/my_wallet/' %}active-nav{% endif %}"><div class="sidebar__link">
+            <span class="sidebar-icons ml-2"><img src="{% static 'img/icons/settings.png'%}"/></span>
+          <span class="pt-2"><h2>Settings</h2></span>
+          </div></a>
+
+          {%endif%}
+            <div class="mr-auto mt-1 post-cta " >
+                {% if user.is_authenticated %}
+                {% if request.path != '/edit_profile/' and request.path != '/report_bug/' %}
+                  <button class="btn  btn-post px-5 "  data-toggle="modal" data-target="#StoryModal">
+  
+                  <span class="text-dark"><b>POST</b> </span> 
+                </button>
+                {% endif %}
+                {% else %}
+  
+                <button href="#"  class=" btn btn-dark btn-post px-5  " data-toggle="modal" data-target="#loginModal"   data-toggle="modal" data-target="#AuthModal">
+  
+                  <span class="text-light"><b>Login</b></span>
+                </button>
+                {% endif %}
+    
+                 </div>
+           
+           
+         
+            <div class=" mt-2 profile-link">
+              {% if user.is_authenticated %}
+              <div class="account">
+                
+  
+                <div class="account-avatar">
+                  <a href="{% url 'view_profile' user.username %}">
+                    {% if my_profile.avatar %}
+                    <img src="{{ my_profile.avatar.url }}"  id="user-main-avatar">
+                    {% else %}
+                        <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                    {% endif %}
+                
+                </a>
+                </div>
+  
+                <div class="user-details ml-1 text-left">
+                  <a href="{% url 'view_profile' user.username %}">
+  
+                  <p ><b>{{my_profile.name |slice:":15"}}</b> {% if my_profile.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 18px;height: auto; margin-bottom: 3px;"></span> {% endif %}<br> </p>
+                  <p class="blue">@{{user.username |slice:":10"}}</p>
+                  </a>
+                </div>
+  
+                <div class="ml-auto mr-2 ">
+                  <div class="card-action">
+              <div class="dropdown">
+              <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light px-3 btn-round" data-toggle="dropdown">
+               <i class="fa-solid fa-ellipsis"></i>
+         
+              </a>
+               <div class="dropdown-menu dropdown-menu-right mt-2 mb-2">
+                 <a class="dropdown-item" href="{% url 'logout' %}" > Logout of @{{user.username}} </a>
+              
+         
+         
+                </div>
+               </div>
+             
+              </div>
+             </div>
+                
+               
+              </div>
+              {% endif %}
+            </a>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar Ends -->
+      <!-- Sidebar Ends -->
+
+     {% block content %} 
+     
+
+     {%endblock%}
+
+  <!-- Widgets Starts -->
+
+  <div class="col right__rail">
+  
+
+
+    <div class="featured">
+     
+
+
+      <div class="input-group main-search mt-5 ">
+        
+        <form action="{% url 'search_results' %}" method="GET" value="{{request.GET.q}}" class="mt-3">
+            
+          <div class="input-group col-12">
+              <input type="search" class="form-control search-input rounded " placeholder="Search Soconey" aria-label="Search" aria-describedby="search-addon" name="q" value="{{request.GET.q}}" />
+              {% if user.is_authenticated %}
+
+              <button name="submit" type="submit" class="btn btn-light btn-round "><i class="fa fa-search"></i></button>
+              {%else %}
+              <a href="#"  class="btn btn-trans " data-toggle="modal" data-target="#loginModal"><i class="fa fa-search"></i></a>
+            {%endif%}
+            </div>
+
+          </form>
+
+    
+      </div>
+
+
+      <div class="featured__sticky ">
+        
+
+        <div class="trending-block mt-3">
+          
+          <div class="trending-title">
+
+            <span class="baraza ml-4 mt-2"> 
+              <img src="{% static 'img/icons/industry.png' %}">
+            </span>
+
+            <span >  <h4 class="ml-3  mt-2"><b> Industries </b> </h4> </span>
+          
+        </div>
+        <div class="mt-2">
+          <ul class=" topic_list ">
+            {% for industry in random_industries %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'industry_filter' industry.0 %}">
+
+            <li id="topic-link" class="mt-2 mt-2">
+              <i class="fa-solid fa-cube orange mr-2"></i>  <b> {{ industry.1 }}</b>
+              
+                
+            </li>
+          </a>
+          {%else%}
+
+          <a data-toggle="modal" data-target="#loginModal" href="#" >
+
+            <li id="topic-link" class="mt-2 mt-2">
+              <i class="fa-solid fa-cube orange mr-2"></i>  <b> {{ industry.1 }}</b>
+              
+                
+            </li>
+          </a>
+          {%endif%}
+
+        {% endfor %}            
+          </ul>
+        
+          <div class="ml-5">
+            {% if user.is_authenticated %}
+           <a href="{% url 'industry_list' %}" class="blue">Show All <i class="fa-solid fa-arrow-right ml-1"></i></a>
+           {%else%}
+           <a data-toggle="modal" data-target="#loginModal" href="#" class="blue">Show All<i class="fa-solid fa-arrow-right ml-1"></i></a>
+           {%endif%}
+            </div>
+        
+      
+
+        </div>
+
+      </div>
+      
+
+    </div> 
+   
+    <div class="mr-auto mt-3">
+
+      <a href="#" class=" btn btn-trans kofi"  data-toggle="modal" data-target="#TipModal">
+        <img src="{% static 'img/icons/kofi.png' %}"> <small class="grey"> Coffee</small> </a>
+      </div>
+    <!-- Widgets Ends -->
+  </div>
+
+<div class="footer">
+ <a href="{% url 'policy' 'guidelines' %}"> Community Guidelines</a> - <a href="{% url 'policy' 'manifesto' %}"> Manifesto </a> - <a href="{% url 'policy' 'privacy' %}"> Privacy</a> - <a href="{% url 'policy' 'terms' %}"> Terms of Service</a> - <a href="{% url 'policy' 'license' %}" >License</a><br> &copy <script>document.write(new Date().getFullYear())</script> Soconey ™
+</div>
+ 
+<div class="follow-block pt-3">
+  <div class="row socials">
+    <ul>
+      
+        
+        <li>
+            <a href="#"> <i class="fa-brands fa-tiktok"></i> </a>
+        </li>
+        <li>
+            <a href="#"> <i class="fa-brands fa-youtube red ml-2"></i> </a>
+        </li>
+       
+    </ul>
+  </div>
+</div>
+  </div>
+
+  
+  </div>
+
+
+
+
+  <!-- Main Body Ends -->
+  </body>
+
+  <div class="modal fade" id="ShareModal" tabindex="-1" role="dialog" aria-labelledby="ShareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+  
+    
+      <div class="modal-body  mx-auto"> 
+        
+  
+        <p class="text-center"><b>Share to</b></p>
+            <div class="row  mt-2">
+              
+            <div class="mx-auto">
+              <button class="btn btn-light btn-round share-btn" data-platform="facebook"><i class="fab fa-facebook-f blue"></i></button>
+              <button class="btn btn-light btn-round share-btn" data-platform="twitter"><i class="fab fa-twitter blue"></i></button>
+              <button class="btn btn-light btn-round share-btn" data-platform="linkedin"><i class="fab fa-linkedin-in blue"></i></button>
+              <button class="btn btn-light btn-round share-btn" data-platform="whatsapp"><i class="fab fa-whatsapp green"></i></button>
+              <button class="btn btn-light btn-round share-btn" data-platform="reddit"><i class="fab fa-reddit-alien orange"></i></button>
+            </div>
+            </div>
+                  <br>
+            <div class="row ml-2 mr-2  text-center">
+             <small><span id="postUrl{{ post.id}}" class="share-url blue" ></span>
+                    
+             <button class="btn mx-auto btn-trans text-danger btn-round px-3 " id="copyBtn{{ post.id }}" ><small> Copy Link</small> <i class="fa-regular fa-copy ml-1"></i></button>
+            </small>
+           </div>
+        </div>
+      <div class="modal-footer ">
+        <p class="grey mx-auto"><small >Copy the link or select the platform you want to share to</small></p>
+  
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content comment-message mb-2">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-auto text-light">
+                <p id="messageText" class="text-center ">This is a message.</p>
+            </div>
+  
+        </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body mx-auto">
+            <p class="text-center">Login to continue </p>
+            <hr>
+            <form method="POST" class="text-center " action="{% url 'landing' %}">
+            
+            
+            {% csrf_token %}
+            {{ login_form|crispy }}
+  
+            
+             <button type="submit" class="btn btn-danger btn-block waves-effect waves-light ">Log In</button><hr>
+             <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-block waves-effect waves-light  mt-2"><img src="{% static 'img/google-i.png' %}" class="google_icon  mr-1"> Continue with Google </a>  
+  
+            
+           
+            
+             </form>
+             <div class="text-center mt-1 ">
+              <!-- <a href="#" class="btn btn-outline-danger px-3 mt-2" id="google-connect"> <span><i class="fa-brands fa-google"></i> Continue with Google</span></a> -->
+              <!-- <a href="#" class="btn btn-outline-dark px-3 mt-2" id="google-connect"> <span><i class="fa-brands fa-apple"></i> Login with Apple</span></a> -->
+  
+             </div>
+            </div>
+        <div class="modal-footer">
+        
+          <div class="mx-auto">
+            <a href="{% url 'request_password_reset' %}">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="imageDeletedModal" tabindex="-1" role="dialog" aria-labelledby="postDeletedModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content delete">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <p class="text-center"> Your Image has been successfully deleted. </p>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  
+<div class="modal fade" id="StoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close "data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" >&times;</span>
+        </button>
+      </div>
+
+          <div class="container">
+            <div class="modal-body">
+            <ul class="form-tabs-bar  text-center">
+              <li id="tab1" class="form-tab form-tab-active btn btn-light btn-round grey"><i class="fa-solid fa-hashtag "></i></li>
+              <li id="tab2" class="form-tab btn btn-light btn-round grey"> <i class="fa-solid fa-store"></i></li>
+              <li id="tab3" class="form-tab btn btn-light btn-round grey"><i class="fa-solid fa-briefcase"></i></li>
+              <li id="tab4" class="form-tab btn btn-light btn-round grey"><i class="fa-solid fa-landmark"></i></li>
+
+            </ul>
+
+            
+
+            <div class="form-content-container mt-4 ">
+              <div class="form-content form-content-tab1 form-content-active">
+
+                <form class="post_form" accept-charset="UTF-8" action="{% url 'upload_post' %}" method="POST" enctype="multipart/form-data" id="post-form">
+                  {% csrf_token %}
+                  <!-- {{ form.as_p }} -->
+
+
+                  <!-- <div class="form-group ml-2 mt-3 topic">
+                    <label for="{{ form.topic.id_for_label }}" class="mr-2">Topic: </label>
+                    {{ post_form.topic }}
+                </div> -->
+
+
+                  <p class="orange text-center"><small>Post a thread</small></p>
+                  <div class="form-group mt-3">
+
+                    <textarea type="text" name="body" class="form-control post-input"  placeholder="Your Post goes here ..." style="height: 180px;" ></textarea>
+                  </div>
+
+                <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                  <div class="progress">
+                      <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+              </div>
+
+              <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                <small>Transaction Fees : SC 8</small> 
+              </button> --
+              </div>
+
+                  <div class="col-12  ">
+                    <div class="row">
+                    
+                    <div class="form-group">
+                    <input type="file" id="id_image" name="{{ form.image.name }}" class="file-input">
+         
+                </div>                       
+                  </div>
+
+                  <div class="thumbnail-container">
+                    <button class=" btn btn-light  clear-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                    <img id="thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px;">
+
+                </div>
+
+                  </div>
+                  <div id="uploaded_files"></div>
+                 <div class="alert alert-danger resmessage" style="display:none;"></div>
+                 <div class="row">
+                  <div class="mr-auto mt-2 ml-3">
+                    <label for="id_image" class="file-label">
+                      <span class="icon">
+                        <img src="{% static 'img/icons/image.png'%}" alt="">
+                      </span> 
+                  </label>
+                  </div>
+                 <div class="ml-auto mt-3 mr-3">
+                  <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Post</button>
+                </div>
+                </div>
+
+                </form>
+
+              </div>
+            </div>
+
+            <div class="form-content-container ">
+              <div class="form-content form-content-tab2 ">
+              
+
+                      
+                      <form class="post_form " accept-charset="UTF-8" action="{% url 'upload_sell' %}" method="POST" enctype="multipart/form-data" id="sell-form">
+                        {% csrf_token %}
+                        <!-- {{ form.as_p }} -->
+
+                                          
+                        <p class="orange text-center"><small>Post a deal</small></p>
+
+                
+                  
+               
+
+                
+                        <div class="form-group mt-3 topic">
+                          {{ sell_form.headline }}
+                      </div>
+                
+                
+                  
+                  
+                        <div class="form-group mt-3">
+                  
+                          <textarea type="text" name="body" class="form-control post-input"  placeholder="Description.." style="height: 380px;" ></textarea>
+                        </div>
+                  
+                      <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                        <div class="progress">
+                            <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                    </div>
+                    <hr>
+                    <div class="row ml-auto mt-1">
+                      <div class="form-group topic ml-2">
+                        Type: {{ sell_form.sell_type }}
+                      </div>
+                      <div class="form-group topic ml-2">
+                        Button: {{ sell_form.cta }}
+                      </div>
+                  
+                  <div class="form-group  mt-1">
+                    {{ sell_form.cta_link }}
+                  </div>
+                  
+                  
+                  
+                    </div>
+      
+                  <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                    <small>Transaction Fees : SC 21</small> 
+                  </button> --
+                  </div>
+                  <div class="col-12  ">
+                    <div class="row">
+                    
+                    <div class="form-group">
+                    <input type="file" id="id_sell_image" name="{{ form.image.name }}" class="file-input">
+                
+                </div>                       
+                  </div>
+                
+                  <div class="sell-thumbnail-container">
+                    <button class=" btn btn-light  clear-sell-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                    <img id="sell_thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px; ">
+                
+                </div>
+                
+                  </div>
+                  <div id="uploaded_files"></div>
+                 <div class="alert alert-danger resmessage" style="display:none;"></div>
+                 <div class="row">
+                  <div class="mr-auto mt-2 ml-3">
+                    <label for="id_sell_image" class="file-label">
+                      <span class="icon">
+                        <img src="{% static 'img/icons/image.png'%}" alt="">
+                      </span> 
+                  </label>
+                  </div>
+                 <div class="ml-auto mt-3 mr-3">
+                  <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Publish</button>
+                </div>
+                </div>
+                  
+                       
+                  
+                      </form> 
+                
+              </div>
+
+
+
+            </div>
+
+            <div class="form-content-container ">
+              <div class="form-content form-content-tab3 ">
+
+                    <form class="post_form mt-3" action="{% url 'upload_gig' %}" accept-charset="UTF-8"  method="POST" enctype="multipart/form-data" id="gig-form">
+                      {% csrf_token %}
+                      <!-- {{ form.as_p }} -->
+                      <p class="orange text-center"><small>Post a vacancy</small></p>
+
+
+                    
+                <div class="form-group ml-2 topic ">
+                  {{ gig_form.industry }}
+                </div>            
+                
+                 
+    
+                      <div class="form-group  mt-3">
+                        {{ gig_form.location }}
+                      </div>
+
+                      <div class="form-group  mt-3 topic">
+                        {{ gig_form.title }}
+                    </div>
+                    
+                    <div class="row ml-2">
+               
+                      <div class="form-group mr-2  topic">
+                        <label>XP :</label>
+                        {{ gig_form.experience }}
+                      </div>
+                      
+                      
+                      <div class="form-group   topic">
+                        <label> Type :</label>
+                        {{ gig_form.gig_type }}
+                    </div>
+                  </div>
+
+                  <div class=" form-group mt-2">
+                    {{ gig_form.apply_link }}
+                  </div>
+                
+                      <div class="form-group mt-3">
+                
+                        <textarea type="text" name="body" class="form-control post-input"  placeholder="Description.." style="height: 200px;" ></textarea>
+                      </div>
+                
+                    <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                      <div class="progress">
+                          <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                  </div>
+                
+                  
+
+
+                  <div class="text-center  mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" data-target="#GasModal">
+                    <small>Transaction Fees : SC 13</small> 
+                  </button> --
+                  </div>
+                      
+                     
+                     <div class=" mt-3 text-center">
+                      <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Publish</button>
+                    </div>
+                    </form>
+                
+                
+              </div>
+
+
+
+            </div>
+
+            <div class="form-content-container ">
+              <div class="form-content form-content-tab4 ">
+
+                <form class="post_form" accept-charset="UTF-8" action="{% url 'upload_project' %}" method="POST" enctype="multipart/form-data" id="project-form">
+                  {% csrf_token %}
+                  <!-- {{ form.as_p }} -->
+                  <p class="orange text-center"><small>Post a project</small></p>
+
+                  
+                <div class="form-group ml-2 mt-3 topic">
+                  {{ project_form.industry }}
+              </div>
+              <div class="form-group ml-2 mt-3 topic">
+                {{ project_form.headline }}
+            </div>
+
+
+
+                  <div class="form-group mt-3">
+
+                    <textarea type="text" name="body" class="form-control post-input"  placeholder="Describe your Project ..." style="height: 180px;" ></textarea>
+                  </div>
+
+                <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                  <div class="progress">
+                      <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+              </div>
+              <hr>
+              <div class="row ml-auto mt-1">
+                <div class="form-group topic ml-2">
+                  Progress: {{ project_form.progress }}
+                </div>
+                <div class="form-group topic ml-2">
+                  Button: {{ project_form.project_cta }}
+                </div>
+            
+            <div class="form-group  mt-1">
+              {{ project_form.cta_link }}
+            </div>
+            
+            
+            
+              </div>
+              <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                <small>Transaction Fees : SC 5</small> 
+              </button> --
+              </div>
+
+                  <div class="col-12  ">
+                    <div class="row">
+                    
+                    <div class="form-group">
+                    <input type="file" id="id_project_image" name="{{ form.image.name }}" class="file-input">
+         
+                </div>                       
+                  </div>
+
+                  <div class="thumbnail-container">
+                    <button class=" btn btn-light  clear-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                    <img id="thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px;">
+
+                </div>
+
+                  </div>
+                  <div id="uploaded_files"></div>
+                 <div class="alert alert-danger resmessage" style="display:none;"></div>
+                 <div class="row">
+                  <div class="mr-auto mt-2 ml-3">
+                    <label for="id_image" class="file-label">
+                      <span class="icon">
+                        <img src="{% static 'img/icons/image.png'%}" alt="">
+                      </span> 
+                  </label>
+                  </div>
+                 <div class="ml-auto mt-3 mr-3">
+                  <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Post</button>
+                </div>
+                </div>
+
+                </form>
+                
+                
+              </div>
+
+
+
+            </div>
+
+                </div>
+                </div>
+
+      <div class="modal-footer">
+        <div class="mx-auto ">
+          <button class="btn btn-trans text-success "  data-toggle="modal" data-target="#GasModal">
+          <small>One view mints you 0.2 coins </small>
+
+        </button> 
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+  
+<div class="modal fade" id="TipModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+          <div class="modal-body">
+            <p class="text-center">Support the ongoing development of this platform</p>
+              <iframe id='kofiframe' src='https://ko-fi.com/georgemwai/?hidefeed=true&widget=true&embed=true&preview=true' style='border:none;width:100%;padding:4px;background:#f9f9f9;' height='712' title='georgemwai'></iframe>
+
+      </div>
+      
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" id="token-modal">
+      <div class="modal-header">
+        <h5 class="modal-title ml-2" id="successModalLabel">Delete Post? </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto mb-2">
+       <p class="text-center "> This action is not reversible. Your post will be permanently deleted from Soconey. Do you wish to proceed?</p>
+        <div class="text-center">
+          <button class="btn btn-danger btn-block waves-effect waves-light btn-round" id="deleteConfirmButton">Delete</button> 
+          <button class="btn btn-outline-dark btn-block waves-effect waves-light btn-round " data-dismiss="modal">Cancel</button>
+      </div>
+              
+
+    </div>
+
+    <div class="modal-footer">
+      
+    </div>
+  </div>
+</div>
+</div> 
+
+<div class="modal fade" id="postDeletedModal" tabindex="-1" role="dialog" aria-labelledby="postDeletedModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content delete">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center"> The post has been successfully deleted. </p>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+  <div class="modal fade" id="ProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+            <div class="container">
+              <div class="modal-body">
+            
+                  <form class="post_form" accept-charset="UTF-8" action="{% url 'upload_project' %}" method="POST" enctype="multipart/form-data" id="project-form">
+                    {% csrf_token %}
+                    <!-- {{ form.as_p }} -->
+                    <h5 class="text-center mt-2">New Project</h5>
+  
+                    
+                  <div class="form-group ml-2 mt-3 topic">
+                    {{ project_form.industry }}
+                </div>
+                <div class="form-group ml-2 mt-3 topic">
+                  {{ project_form.headline }}
+              </div>
+  
+  
+  
+                    <div class="form-group mt-3">
+  
+                      <textarea type="text" name="body" class="form-control post-input"  placeholder="Describe your Project ..." style="height: 180px;" ></textarea>
+                    </div>
+  
+                  <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                    <div class="progress">
+                        <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                </div>
+                <hr>
+                <div class="row ml-auto mt-1">
+                  <div class="form-group topic ml-2">
+                    Progress: {{ project_form.progress }}
+                  </div>
+                  <div class="form-group topic ml-2">
+                    Call to Action: {{ project_form.project_cta }}
+                  </div>
+              
+              <div class="form-group  mt-1">
+                {{ project_form.cta_link }}
+              </div>
+              
+              
+              
+                </div>
+                <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                  <small>Transaction Fees : 5</small> <img src="{% static 'img/logo1.png'%}" id="credit-logo" alt="" class="mb-1">
+                </button> --
+                </div>
+  
+                    <div class="col-12  ">
+                      <div class="row">
+                      
+                      <div class="form-group">
+                      <input type="file" id="id_project_image" name="{{ form.image.name }}" class="file-input">
+           
+                  </div>                       
+                    </div>
+  
+                    <div class="thumbnail-container">
+                      <button class=" btn btn-light  clear-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                      <img id="thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px;">
+  
+                  </div>
+  
+                    </div>
+                    <div id="uploaded_files"></div>
+                   <div class="alert alert-danger resmessage" style="display:none;"></div>
+                   <div class="row">
+                    <div class="mr-auto mt-2 ml-3">
+                      <label for="id_image" class="file-label">
+                        <span class="icon">
+                          <img src="{% static 'img/icons/image.png'%}" alt="">
+                        </span> 
+                    </label>
+                    </div>
+                   <div class="ml-auto mt-3 mr-3">
+                    <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Post</button>
+                  </div>
+                  </div>
+  
+                  </form>
+  
+                  </div>
+                  </div>
+  
+        <div class="modal-footer">
+          <div class="mx-auto ">
+            <button class="btn btn-trans text-success "  data-toggle="modal" data-target="#GasModal">
+            <small>One view mints you 0.2 coins </small>
+  
+          </button> 
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+
+ 
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content post-success" >
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+          <div class="modal-body mb-3">
+              <p id="successMessage" class="text-center">Your post was successful. </p>
+
+          </div>
+         
+      </div>
+  </div>
+</div>
+
+<!-- Search Modal -->
+<div class="modal fade" id="SearchModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content mb-2">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="input-group  ">
+             
+              <form action="{% url 'search_results' %}" method="GET" value="{{request.GET.q}}" class="mt-3">
+                  
+                <div class="input-group modal-search col-12">
+                    <input type="search" class="form-control search-input rounded " placeholder="Search Soconey" aria-label="Search" aria-describedby="search-addon" name="q" value="{{request.GET.q}}" />
+                    <button name="submit" type="submit" class="btn btn-outline-dark "> Search</button>
+                  </div>
+                </form>
+          
+            </div>
+
+          </div>
+
+          <div class="modal-footer  ">
+            
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+<div class="fixed-bottom-menu ">
+  {% if user.is_authenticated %}
+  <div class="fixed-bottom-menuــrow row ">
+    <a href="{% url 'home'%}" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/home.png'%}"/>
+      </span>
+      <h6 class="mt-1">Home</h6>
+    </a>
+  
+    <a href="{% url 'market'%}" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/shop.png'%}"/>
+      </span>
+      <h6 class="mt-1">Market</h6>
+    </a>
+    
+    <a href="#" title=""  data-toggle="modal" data-target="#StoryModal" class="fixed-bottom-menu__a post-sm">
+      <span class="main-cta">
+        <img src="{% static 'img/logo.png'%}"/>
+      </span>
+      <h6 class="mt-1">POST</h6>
+    </a>
+    <a href="#" title="" data-toggle="modal" data-target="#SearchModal"  class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/search.png'%}"/>
+      </span>
+      <h6 class="mt-1">Search </h6> 
+    </a>
+
+    <div class="card-action fixed-bottom-menu__a ">
+      <div class="dropdown dropdown-toggle-nocaret ">
+<a href="javascript:void();" title=""   data-toggle="dropdown">
+  <span class="" id="more_btn">
+    <img src="{% static 'img/icons/more.png'%}"/> 
+  </span><div class="notis-badge-mobile"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <p >{{alerts_c}}</p></span>{% endif %}</div>
+  <h6 class=" mt-1">More</h6>
+</a>
+             <div class="dropdown-menu more-dropdown dropdown-menu-right">
+              <a class="dropdown-item" href="{% url 'my_wallet' %}"><i class="fa-solid fa-wallet mr-2 "></i> Wallet</a>
+
+        <a class="dropdown-item" href="{% url 'bookmark_list'%}"><i class="fa-regular fa-bookmark mr-2 "></i> Bookmarks</a>
+        <a class="dropdown-item" href="{% url 'view_alerts'%}"><i class="fa-regular fa-bell mr-2 "></i> Alerts  {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> </span>{% endif %}</a> 
+
+       <a class="dropdown-item" href="{% url 'settings'%}"><i class="fa-solid fa-gear mr-2 "></i> Settings</a>
+       <a class="dropdown-item kofi-mobi" href="#" data-toggle="modal" data-target="#TipModal"><i class="fa-solid fa-mug-hot orange mr-2"></i> Coffee </a>
+
+        </div>
+</div>
+</div>
+    
+
+  </div>
+  {% else %}
+    <div class="fixed-bottom-menuــrow row ">
+      <a data-toggle="modal" data-target="#loginModal"  class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/home.png'%}"/>
+        </span>
+        <h6 class="mt-1">Home</h6>
+      </a>
+    
+      <a href="{% url 'market'%}" title="" class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/shop.png'%}"/>
+        </span>
+        <h6 class="mt-1">Market</h6>
+      </a>
+      
+      <a href="#" title=""  data-toggle="modal" data-target="#loginModal" class="fixed-bottom-menu__a post-sm">
+        <span class="main-cta">
+          <img src="{% static 'img/logo.png'%}"/>
+        </span>
+        <h6 class="mt-1">POST</h6>
+      </a>
+      <a href="#" title="" data-toggle="modal" data-target="#loginModal"  class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/search.png'%}"/>
+        </span>
+        <h6 class="mt-1">Search </h6> 
+      </a>
+
+      <div class="card-action fixed-bottom-menu__a ">
+        <div class="dropdown dropdown-toggle-nocaret ">
+  <a data-toggle="modal" data-target="#loginModal" >
+    <span class="" id="more_btn">
+      <img src="{% static 'img/icons/more.png'%}"/> 
+    </span>
+    <h6 class=" mt-1">More</h6>
+  </a>
+               
+  </div>
+  </div>
+ 
+
+    </div>
+    {% endif %}
+</div>
+
+
+  {% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/popper.min.js'%}"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/app_scripts.js'%}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+  <script src="{% static 'js/edit_profile_modal.js'%}"></script>
+  <script src="{% static 'js/edit_profile.js'%}"></script>
+
+  <script src="{% static 'js/follow.js'%}"></script>
+  <script src="{% static 'js/bookmark.js'%}"></script>
+
+  <script src="{% static 'js/repost.js'%}"></script>
+  <script src="{% static 'js/edit_avatar.js'%}"></script>
+  <script src="{% static 'js/edit_cover.js'%}"></script>
+
+  <script src="{% static 'js/username.js'%}"></script>
+  <script src="{% static 'js/delete_post.js'%}"></script>
+
+  <script src="{% static 'js/votes.js'%}"></script>
+  <script src="{% static 'js/comment.js'%}"></script>
+  <script src="{% static 'js/comment_votes.js'%}"></script>
+  <script src="{% static 'js/delete_comment.js'%}"></script>
+  <script src="{% static 'js/reply.js'%}"></script>
+
+  <script src="{% static 'js/progress.js'%}"></script>
+  <script>
+    $(document).ready(function () {
+
+   $('#ReportBugForm').submit(function (e) {
+        e.preventDefault();
+
+        $.ajax({ 
+            url: '/report_bug/',  
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (data) {
+                if (data.success) {
+                    $('#successModal').modal('show');
+                    setTimeout(function() {
+          $('#successModal').modal('hide');
+          $('#ReportBugForm textarea').val('');
+
+        }, 2000);
+                } else {
+                    // Handle errors and display them in the modal
+                    $('#errorModal').modal('show');
+                    // You can append the errors to a specific element in the modal
+                    // e.g., $('#errorModal .modal-body').html(data.errors);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+  });
+
+  
+$('#post-form').submit(function(event) {
+event.preventDefault();
+
+var formData = new FormData(this);
+var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+var modal = $('#StoryModal'); // Assuming your modal ID is 'postModal'
+
+var imageInput = $('#id_image')[0]; // Replace 'id_post_image' with the actual ID of the image input
+
+// Check if an image was selected
+if (imageInput.files.length > 0) {
+    // Append the selected file to formData
+    formData.append('post_image', imageInput.files[0]);
+}
+
+var successModal = $('#successModal'); // Your success modal ID
+$.ajaxSetup({
+    headers: {
+        'X-CSRFToken': csrfToken
+    }
+});
+$.ajax({
+    url: '{% url "upload_post" %}',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+        if (response.success) {
+            modal.modal('hide');
+            $('#post-form')[0].reset();
+            // Show the success modal
+            successModal.modal('show');
+            // Update the success message in the modal
+            $('#successMessage').text(response.message);
+            // Close the success modal after a certain delay (e.g., 3 seconds)
+            setTimeout(function() {
+                successModal.modal('hide');
+                location.reload();
+            }, 3000); // 3000 milliseconds (3 seconds)
+        } else {
+            alert(response.message);
+        }
+    },
+    error: function() {
+        alert('An error occurred while submitting the form.');
+    }
+});
+});
+
+$('#gig-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+        var modal = $('#StoryModal'); // Assuming your modal ID is 'gigModal'
+        var successModal = $('#successModal');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+
+        $.ajax({
+            url: '{% url "upload_gig" %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    modal.modal('hide');
+                    $('#gig-form')[0].reset();
+                    // Show the success modal
+                    successModal.modal('show');
+                    // Update the success message in the modal
+                    $('#successMessage').text(response.message);
+                    // Close the success modal after a certain delay (e.g., 3 seconds)
+                    setTimeout(function() {
+                        successModal.modal('hide');
+                        location.reload();
+                    }, 3000); // 3000 milliseconds (3 seconds)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    });
+
+$('#sell-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+        var imageInput = $('#id_sell_image')[0]; // Replace 'id_post_image' with the actual ID of the image input
+
+// Check if an image was selected
+        if (imageInput.files.length > 0) {
+    // Append the selected file to formData
+    formData.append('post_image', imageInput.files[0]);
+      }
+
+        var modal = $('#StoryModal'); 
+        var successModal = $('#successModal'); // Your success modal ID
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+
+        $.ajax({
+            url: '{% url "upload_sell" %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    modal.modal('hide');
+                    $('#sell-form')[0].reset();
+                    // Show the success modal
+                    successModal.modal('show');
+                    // Update the success message in the modal
+                    $('#successMessage').text(response.message);
+                    // Close the success modal after a certain delay (e.g., 3 seconds)
+                    setTimeout(function() {
+                        successModal.modal('hide');
+                    }, 3000); // 3000 milliseconds (3 seconds)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    }); 
+
+
+$('#project-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+        var imageInput = $('#id_project_image')[0]; // Replace 'id_post_image' with the actual ID of the image input
+
+// Check if an image was selected
+        if (imageInput.files.length > 0) {
+    // Append the selected file to formData
+    formData.append('post_image', imageInput.files[0]);
+      }
+
+        var modal = $('#StoryModal'); 
+        var successModal = $('#successModal'); // Your success modal ID
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+
+        $.ajax({
+            url: '{% url "upload_project" %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    modal.modal('hide');
+                    $('#project-form')[0].reset();
+                    // Show the success modal
+                    successModal.modal('show');
+                    // Update the success message in the modal
+                    $('#successMessage').text(response.message);
+                    // Close the success modal after a certain delay (e.g., 3 seconds)
+                    setTimeout(function() {
+                        successModal.modal('hide');
+                    }, 3000); // 3000 milliseconds (3 seconds)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    }); 
+
+    $(document).ready(function() {
+
+var smessage = "Check out soconey.com its amazing!"
+document.addEventListener('DOMContentLoaded', function() {
+document.getElementById('facebook-share-btn').addEventListener('click', function() {
+  window.location.href = 'https://www.facebook.com/sharer.php?u=https://soconey.com&quote=smessage';
+});
+
+document.getElementById('twitter-share-btn').addEventListener('click', function() {
+  window.location.href = 'https://twitter.com/intent/tweet?url=https://soconey.com&text=smessage';
+});
+
+document.getElementById('linkedin-share-btn').addEventListener('click', function() {
+  window.location.href = 'https://www.linkedin.com/shareArticle?url=https://soconey.com&title=smessage';
+});
+
+document.getElementById('whatsapp-share-btn').addEventListener('click', function() {
+  window.location.href = 'https://api.whatsapp.com/send?text=smessage%20-%20https://soconey.com';
+});
+
+document.getElementById('reddit-share-btn').addEventListener('click', function() {
+  window.location.href = 'https://www.reddit.com/submit?url=https://soconey.com&title=smessage';
+});
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+// Function to construct the share URL for each platform
+function constructShareUrl(platform) {
+  var postUrl = document.getElementById('postUrl{{ post.id }}').textContent;
+  switch (platform) {
+    case 'facebook':
+      return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(postUrl);
+    case 'twitter':
+      return 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(postUrl);
+    case 'linkedin':
+      return 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(postUrl);
+    case 'whatsapp':
+      return 'https://api.whatsapp.com/send?text=' + encodeURIComponent(postUrl);
+    case 'reddit':
+      return 'https://www.reddit.com/submit?url=' + encodeURIComponent(postUrl);
+    default:
+      return '';
+  }
+}
+
+
+var postUrl = document.getElementById('postUrl{{ post.id }}');
+  var range = document.createRange();
+  range.selectNode(postUrl);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+  alert('Post URL copied to clipboard');
+});
+
+// Event listener for share buttons
+var shareButtons = document.querySelectorAll('.share-btn');
+shareButtons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    var platform = this.getAttribute('data-platform');
+    var shareUrl = constructShareUrl(platform);
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  });
+});
+});
+
+
+    $(document).ready(function() {
+    // Event listener for share button click
+    $('.share-btn').click(function() {
+        var postUrl = $(this).data('post-url');
+        
+        // Set post URL in modal
+        $('#postUrl').text(postUrl);
+        
+        // Show the modal
+        $('#ShareModal').modal('show');
+    });
+
+    // Event listener for copy button click
+    $('#copyBtn').click(function() {
+        // Select text in post URL span
+        var text = document.getElementById('postUrl');
+        var range = document.createRange();
+        range.selectNode(text);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        // Copy selected text
+        document.execCommand('copy');
+        
+        // Deselect text
+        window.getSelection().removeAllRanges();
+        
+        // Show copy success message (optional)
+        $(this).text('Copied');
+    });
+
+    $('#ShareModal').on('hidden.bs.modal', function () {
+        // Reset copy button text to "Copy"
+        $('#copyBtn').text('Copy');
+    });
+});
+
+// script.js
+// script.js
+$('.pin-button').click(function(e) {
+    e.preventDefault();
+    var postId = $(this).data('post-id');
+    var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();  // Get the CSRF token from the form
+
+    $.ajax({
+        url: `/toggle_pin/${postId}/`,
+        method: 'POST',
+        headers: { "X-CSRFToken": csrfToken },  // Include CSRF token in headers
+        success: function(response) {
+            if (response.success) {
+                // Display success message in modal
+                $('#messageText').text('Pin toggled successfully');
+                $('#messageModal').modal('show');
+                // Automatically hide the modal after 2 seconds
+                setTimeout(function() {
+                    $('#messageModal').modal('hide');
+                }, 2000);
+                // Reload the page after modal is closed
+                $('#messageModal').on('hidden.bs.modal', function () {
+                    location.reload();
+                });
+            } else {
+                // Display error message in modal
+                $('#messageText').text('An error occurred while toggling pin.');
+                $('#messageModal').modal('show');
+            }
+        },
+        error: function(error) {
+            console.error('Error toggling pin:', error);
+            // Display error message in modal
+            $('#messageText').text('An error occurred while toggling pin.');
+            $('#messageModal').modal('show');
+        }
+    });
+});
+
+  </script>
+  {% endblock %}
+  
+</html>

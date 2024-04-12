@@ -1,0 +1,363 @@
+{% extends '../app/profile_base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="col">
+    <div class="container ">
+      <ul class="tabs-bar text-center ">
+        <li id="tab1" class="tab tab-active"><b>My Account</b></li>
+       
+      </ul>
+
+
+      <div class="app--feed mt-5 ">
+        <div class="content-container">
+    
+          <div class="content content-tab1 content-active">
+      
+      
+           
+        <form method="post" enctype="multipart/form-data" class="mt-5 text-center" id="editAccountForm">
+          {% csrf_token %}
+          <div class="edit-username mt-3 text-center">
+          
+            <div class="row mt-5 liab-text col-10 mx-auto ">
+                <a href="{% url 'view_profile' user.username%}"> 
+                <p class="text-center grey">
+              <i class="fa-solid fa-circle-info "></i> 
+                <small>Go to the profile page to edit your profile pic & cover image</small>
+                </p>
+                </a>
+              </div>
+            <!-- <div class="edit-info mb-5">
+                <span><i class="fa-regular fa-lightbulb orange mr-2"></i><small class="text-center"> Complete profile and claim your SC 500 reward</small></span> 
+               </div> -->
+          {{ form.as_p }}
+
+          <button  class="btn btn-round btn-primary px-3" type="submit" >Save Changes</button>
+
+        </form>
+      <div class="spacer"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="edit-success">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-4">
+                Your profile has been updated successfully.
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="edit-error">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-4">
+                <!-- Errors will be displayed here -->
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+  <script>
+
+    
+  </script>
+
+<div class="modal fade" id="StoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+            <div class="container">
+              <div class="modal-body">
+              <ul class="form-tabs-bar  text-center">
+                <li id="tab1" class="form-tab form-tab-active"><b>Thread</b></li>
+                <li id="tab2" class="form-tab"> <b>Sell</b></li>
+                <li id="tab3" class="form-tab"> <b>Gig</b></li>
+  
+              </ul>
+  
+              
+  
+              <div class="form-content-container mt-4 ">
+                <div class="form-content form-content-tab1 form-content-active">
+  
+                  <form class="post_form" accept-charset="UTF-8" action="{% url 'upload_post' %}" method="POST" enctype="multipart/form-data" id="post-form">
+                    {% csrf_token %}
+                    <!-- {{ form.as_p }} -->
+  
+  
+                    <!-- <div class="form-group ml-2 mt-3 topic">
+                      <label for="{{ form.topic.id_for_label }}" class="mr-2">Topic: </label>
+                      {{ post_form.topic }}
+                  </div> -->
+  
+  
+  
+                    <div class="form-group mt-3">
+  
+                      <textarea type="text" name="body" class="form-control post-input"  placeholder="Your Post goes here ..." style="height: 180px;" ></textarea>
+                    </div>
+  
+                  <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                    <div class="progress">
+                        <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                </div>
+  
+                <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                  <small>Transaction Fees : 8</small> <img src="{% static 'img/logo1.png'%}" id="credit-logo" alt="" class="mb-1">
+                </button> --
+                </div>
+  
+                    <div class="col-12  ">
+                      <div class="row">
+                      
+                      <div class="form-group">
+                      <input type="file" id="id_image" name="{{ form.image.name }}" class="file-input">
+           
+                  </div>                       
+                    </div>
+  
+                    <div class="thumbnail-container">
+                      <button class=" btn btn-light  clear-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                      <img id="thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px;">
+  
+                  </div>
+  
+                    </div>
+                    <div id="uploaded_files"></div>
+                   <div class="alert alert-danger resmessage" style="display:none;"></div>
+                   <div class="row">
+                    <div class="mr-auto mt-2 ml-3">
+                      <label for="id_image" class="file-label">
+                        <span class="icon">
+                          <img src="{% static 'img/icons/image.png'%}" alt="">
+                        </span> 
+                    </label>
+                    </div>
+                   <div class="ml-auto mt-3 mr-3">
+                    <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Post</button>
+                  </div>
+                  </div>
+  
+                  </form>
+  
+                </div>
+              </div>
+  
+              <div class="form-content-container ">
+                <div class="form-content form-content-tab2 ">
+                
+  
+                        
+                        <form class="post_form " accept-charset="UTF-8" action="{% url 'upload_sell' %}" method="POST" enctype="multipart/form-data" id="sell-form">
+                          {% csrf_token %}
+                          <!-- {{ form.as_p }} -->
+  
+                                            
+              
+                  
+                    
+                 
+  
+                  
+                          <div class="form-group mt-3 topic">
+                            {{ sell_form.headline }}
+                        </div>
+                  
+                  
+                    
+                    
+                          <div class="form-group mt-3">
+                    
+                            <textarea type="text" name="body" class="form-control post-input"  placeholder="Description.." style="height: 380px;" ></textarea>
+                          </div>
+                    
+                        <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                          <div class="progress">
+                              <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                      </div>
+                      <hr>
+                      <div class="row ml-auto mt-1">
+                        <div class="form-group topic ml-2">
+                          Type: {{ sell_form.sell_type }}
+                        </div>
+                        <div class="form-group topic ml-2">
+                          Call to Action: {{ sell_form.cta }}
+                        </div>
+                    
+                    <div class="form-group  mt-1">
+                      {{ sell_form.cta_link }}
+                    </div>
+                    
+                    
+                    
+                      </div>
+        
+                    <div class="text-center mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" >
+                      <small>Transaction Fees : 21</small> <img src="{% static 'img/logo1.png'%}" id="credit-logo" alt="" class="mb-1">
+                    </button> --
+                    </div>
+                    <div class="col-12  ">
+                      <div class="row">
+                      
+                      <div class="form-group">
+                      <input type="file" id="id_sell_image" name="{{ form.image.name }}" class="file-input">
+                  
+                  </div>                       
+                    </div>
+                  
+                    <div class="sell-thumbnail-container">
+                      <button class=" btn btn-light  clear-sell-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                      <img id="sell_thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px; ">
+                  
+                  </div>
+                  
+                    </div>
+                    <div id="uploaded_files"></div>
+                   <div class="alert alert-danger resmessage" style="display:none;"></div>
+                   <div class="row">
+                    <div class="mr-auto mt-2 ml-3">
+                      <label for="id_sell_image" class="file-label">
+                        <span class="icon">
+                          <img src="{% static 'img/icons/image.png'%}" alt="">
+                        </span> 
+                    </label>
+                    </div>
+                   <div class="ml-auto mt-3 mr-3">
+                    <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Publish</button>
+                  </div>
+                  </div>
+                    
+                         
+                    
+                        </form> 
+                  
+                </div>
+  
+  
+  
+              </div>
+  
+              <div class="form-content-container ">
+                <div class="form-content form-content-tab3 ">
+  
+                      <form class="post_form mt-3" action="{% url 'upload_gig' %}" accept-charset="UTF-8"  method="POST" enctype="multipart/form-data" id="gig-form">
+                        {% csrf_token %}
+                        <!-- {{ form.as_p }} -->
+                  
+  
+                                 
+                  
+                    <div class="row ml-2">
+                 
+                      <div class="form-group mr-2  topic">
+                        <label>XP :</label>
+                        {{ gig_form.experience }}
+                      </div>
+                      
+                      
+                      <div class="form-group   topic">
+                        <label> Type :</label>
+                        {{ gig_form.gig_type }}
+                    </div>
+                  </div>
+      
+                  <div class="form-group ml-2  ">
+                    {{ gig_form.industry }}
+                  </div> 
+                        <div class="form-group  mt-3">
+                          {{ gig_form.location }}
+                        </div>
+  
+                        <div class="form-group  mt-3 topic">
+                          {{ gig_form.title }}
+                      </div>
+                      
+                             
+  
+                    <div class=" form-group mt-2">
+                      {{ gig_form.apply_link }}
+                    </div>
+                  
+                        <div class="form-group mt-3">
+                  
+                          <textarea type="text" name="body" class="form-control post-input"  placeholder="Description.." style="height: 200px;" ></textarea>
+                        </div>
+                  
+                      <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                        <div class="progress">
+                            <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                    </div>
+                  
+                    
+  
+  
+                    <div class="text-center  mt-3 ">-- <button class="btn btn-trans text-primary"  data-toggle="modal" data-target="#GasModal">
+                      <small>Transaction Fees : 13</small> <img src="{% static 'img/logo1.png'%}" id="credit-logo" alt="" class="mb-1">
+                    </button> --
+                    </div>
+                        
+                       
+                       <div class=" mt-3 text-center">
+                        <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Publish</button>
+                      </div>
+                      </form>
+                  
+                  
+                </div>
+  
+  
+  
+              </div>
+                  </div>
+                  </div>
+  
+        <div class="modal-footer">
+          <div class="mx-auto ">
+            <button class="btn btn-trans text-success "  data-toggle="modal" data-target="#GasModal">
+            <small>One view mints you 0.2 coins </small>
+  
+          </button> 
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+{% endblock%}

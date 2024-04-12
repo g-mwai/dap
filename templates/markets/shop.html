@@ -1,0 +1,564 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  
+ <div class="col ">
+
+  <div class="container ">
+  <ul class="tabs-bar text-center ">
+    {% if user.is_authenticated %}
+    <li id="tab1" class="tab "><b>Store</b></li>
+    {%endif%}
+    <li id="tab2" class="tab tab-active"><b>Deals</b></li>
+    {% if user.is_authenticated %}
+    <li id="tab3" class="tab  "><b>Shops</b></li>
+    {%endif%}
+
+
+  </ul>
+  <div class=" feed">
+  <div class="input-group main-search mt-1 ">
+
+
+  </div>
+  <div class="app--feed mt-5 ">
+    {% if user.is_authenticated %}
+    <div class="content-container">
+
+      <div class="content content-tab1">
+  
+       
+      
+       <div class="row mt-4">
+  
+       
+        
+       <div class="post_card  mb-2 col-12 "> 
+       <div class="row">
+        <div class="col-2">
+          <img src="{% static 'img/booking.png' %}" alt="Default Avatar" id="user-main-avatar" class="mt-1">
+
+        </div>
+        <div class="col-6 mt-4 ">
+          <p><b>Booking</b><a  class="badge badge-pill badge-primary  mr-2"> beta </a>
+          </p>
+        </div>
+        <div class="col-4 mt-3">
+            <button data-toggle="modal" data-target="#betaModal" class="btn btn-outline-dark btn-round px-3">Install</button>
+        </div>
+       </div>      
+
+        </div>
+        </div>
+         
+    <!-- END FEED-->
+  </div>
+  
+  
+      </div>
+      {%endif%}
+  <div class="content-container">
+
+    <div class="content content-tab2 content-active">
+
+     
+      {% if posts %}
+      {% for post in posts %}
+      {% if user.is_authenticated %}
+     <div class="row mt-2">
+
+     
+      
+     <div class="post_card  mb-2 col-12 "> 
+       <div class="row">
+        <div class="ml-3 ">
+          <button class="btn btn-trans" data-toggle="tooltip" data-placement="top" title="Views" >
+           <small> <i class="fa-solid fa-chart-simple grey"></i>
+            {{post.view_count}} </small>
+        </button>
+        </div>
+
+       
+     
+      <div class="ml-auto  mr-3 mt-1">
+         <div class="card-action">
+     <div class="dropdown">
+     <a href="javascript:void();" class="dropdown-toggle-nocaret btn-light btn-round px-3" data-toggle="dropdown">
+      <i class="fa-solid fa-ellipsis"></i>
+
+     </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        {% if request.user != post.posted_by %}
+        <button class="dropdown-item follow-button  btn btn-light" data-profile-username="{{ post.posted_by }}"
+                data-initial-state="{% if request.user.username in post.posted_by.following.all %}unfollow{% else %}follow{% endif %}">
+            {% if request.user.username in post.posted_by.following.all %}
+                Unfollow 
+            {% else %}
+            <i class="fa-solid fa-plus mr-1"></i>  Follow 
+
+            {% endif %} 
+        </button>
+
+        {% endif %}
+
+        {% if request.user == post.posted_by %}
+         <button class="dropdown-item" onclick="confirmDelete({{ post.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+        {% endif %}
+
+        {% if request.user != post.posted_by %}
+        <button class="dropdown-item report-button" data-toggle="modal" data-report-id="{{ post.id }}" data-target="#ReportModal"><i class="fa-solid fa-shield-halved red mr-1"></i> Report  </button>
+        {% endif %}
+
+        {% if request.user != post.posted_by %}
+        <button class="dropdown-item bookmark-button btn btn-light btn-round" data-post-id="{{ post.id }}"><i class="fa-regular fa-bookmark mr-2"></i> Bookmark </button>       
+        {% endif %}
+        
+     
+
+
+       </div>
+      </div>
+    
+     </div>
+    </div>
+  </div>
+   
+
+      <div class="post_card--brand ">
+        <div class="brand__info">
+          <!-- Post Company Name (Cumulus by default) and Sponsored or Organic post (remove Sponsored if Organic Post) -->
+
+          <div class="name-tag ">
+
+
+            <a href="{% url 'view_profile' post.posted_by%}">
+            <div class="follow-account ">
+              <span class="account-avatar">
+                {% if post.avatar %}
+               
+                <img src="{{ post.avatar.url }}"  id="user-main-avatar">
+                {% else %}
+                    <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                 
+                    {% endif %}
+              </span>
+              <div class="user-details ">
+                <p><b>{{post.poster_full }} </b> {% if post.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}  . {{post.whenpublished}} </p>
+                <p class="blue">@{{post.posted_by }}</p>
+              </div>
+            
+          </div>
+        </a>
+</div>
+          
+        </div>
+      </div>
+      
+     
+     <div class="container mt-2">
+      <a href="{% url 'post_detail' post.identifier %}">
+      <div class="post-body">
+        
+      <b>{{ post.headline }}</b>
+        <p class="short-body mt-1">
+          <a href="{% url 'post_detail' post.identifier %}" id="post-body" >
+          {{ post.body|slice:":144" }}{% if post.body|length > 144 %}...{% endif %}
+        </a>
+        </p>
+          
+        <p class="full-body mt-1">
+          <a href="{% url 'post_detail' post.identifier %}" id="post-body" >
+
+          {{ post.body }}</a> </p>
+        {% if post.body|length > 144 %}
+            <a class="show-more-link">Show more</a>
+        {% endif %}
+        <a class="show-less-link blue" style="display: none; ">Show less</a>
+
+    </div>
+        </a>
+            {% if post.post_image %}
+            <a href="{% url 'post_detail' post.identifier %}">
+      <div class="post_card--creative mt-2" id="ad_img">
+
+        <img src="{{ post.post_image.url }}">
+       
+        
+    </div> </a>
+  
+    {% endif %}
+      
+     
+    <div class="post_card--summary">
+      <a href="#">
+        <div class="post_card--cta ">
+          <div class="mx-auto mt-2 mb-2">
+            <a href="{% url 'post_detail' post.identifier %}"  class="btn btn-outline-light text-danger px-3">Ksh {{post.min_price}} - {{post.max_price}} </a>
+
+        </div>
+      </div>
+      </a>
+        <!-- DO NOT CHANGE THIS IMAGE -->
+        <div class="post_card--input--left mt-2 ">
+
+          <div class="post-icons">
+            <button class="comment-button btn btn-light btn-round" data-post-id="{{ post.id }}" data-toggle="tooltip" data-placement="top" title="Comments">
+              <i class="fa-regular fa-comment"></i>
+              <span class="post-engagement ml-2" id="comment-count-{{ post.id }}">{{ post.comment_count }}</span>
+
+            </button>
+          </div>
+
+            <div class=" like row ">
+              {% if user.is_authenticated %}
+              
+              <form action="{% url 'upvote_post' post.id %}" method="post">
+                {% csrf_token %}
+              <span > 
+                  <button  class="btn btn-light btn-round upvote-button {% if user in post.likes.all or post.id in clicked_buttons %} clicked-button{% endif %}" data-post-id="{{ post.id }}" data-toggle="tooltip" data-placement="top" title="Like" > <i class="fa-regular fa-heart"></i> </button>         
+              </span>
+              </form>
+            
+            <span class="ml-2 mt-2 mr-2" id="vote-count-{{ post.id }}" > {{ post.vote_count }} </span>
+    
+            <form action="{% url 'downvote_post' post.id %}" method="post">
+              {% csrf_token %}
+            <span>
+              <button  class="btn btn-light btn-round downvote-button {% if user in post.dislikes.all %} clicked-button{% endif %}" data-post-id="{{ post.id }}" data-toggle="tooltip" data-placement="top" title="Dislike"> <i class="fa-solid fa-xmark"></i> </button>
+            </span>
+            </form>
+            {% endif %}
+            </div>
+
+
+           <div class="post-icons  mr-3">
+            <button class="repost-button btn btn-light btn-round share-btn" data-post-url="{% url 'post_detail' post.identifier %}"   data-toggle="tooltip" data-placement="top" title="Share this Post" >
+              <i class="fa-solid fa-arrow-up-from-bracket"></i>
+              </button>
+          </div>
+
+ 
+        <!-- DO NOT CHANGE THIS IMAGE -->
+      </div>
+     
+      
+     
+    
+      </div>
+      <form class="comment-form mt-3" data-post-id="{{ post.id }}">
+        {% csrf_token %}
+
+        <div class="row " id="comment_form">
+          <div class="col-12">
+        <textarea name="comment" placeholder="Post Your Comment" class="comment-input"></textarea>
+      </div>
+
+        </div>
+        <div class="progress mt-2 mb-2  mr-2">
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+
+      <div class="row mb-2">
+          
+        <div class="mr-auto">
+          <div class=" mt-2 ml-3">
+            <a class="btn btn-round btn-light" href="{% url 'post_detail' post.identifier %}"><small> <i class="fa-regular fa-image"></i></small></a>
+    
+            </div>
+        </div>
+    
+        <div class="ml-auto">
+          <div class=" mr-3 mt-2">
+            <button type="submit" class="btn btn-danger btn-round px-3">Send</button>
+            </div>
+        </div>
+      </div>
+      </form>
+      </div>
+
+      
+
+      </div>
+      </div>
+      {%else%}
+      <div class="row ">
+
+     
+        <div class="post_card  mb-2 col-12 "> 
+          <div class="row">
+           <div class="ml-3 ">
+             <button class="btn btn-trans" data-toggle="tooltip" data-placement="top" title="Views" >
+              <small> <i class="fa-solid fa-chart-simple grey"></i>
+               {{post.view_count}} </small>
+           </button>
+           </div>
+   
+           <div class="ml-auto  mr-3 mt-2">
+            <div class="card-action">
+        <div class="dropdown">
+        <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light btn-round" data-toggle="dropdown">
+         <i class="fa-solid fa-ellipsis"></i>
+   
+        </a>
+         <div class="dropdown-menu dropdown-menu-right">
+          
+   
+           {% if request.user != post.posted_by %}
+          <a href="#"  class=" dropdown-item btn btn-trans " data-toggle="modal" data-target="#loginModal">Login</a>
+   
+          {% endif %}
+        
+   
+   
+          </div>
+         </div>
+       
+        </div>
+       </div>
+          
+        
+         
+     </div>
+      
+   
+         <div class="post_card--brand ">
+           <div class="brand__info">
+             <!-- Post Company Name (Cumulus by default) and Sp btn-roundonsored or Organic post (<i class="fa-solid fa-trash-can" ></i> Sponsored if Organic Post) -->
+   
+             <div class="name-tag ">
+   
+   
+               <a href="#">
+               <div class="follow-account ">
+                 <span class="account-avatar">
+                   {% if post.avatar %}
+                  
+                   <img src="{{ post.avatar.url }}"  id="user-main-avatar">
+                   {% else %}
+                       <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                    
+                       {% endif %}
+                 </span>
+                 <div class="user-details ">
+                   <p><b>{{post.poster_full}} </b> {% if post.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}  . {{post.whenpublished}} </p>
+                   <p class="blue">@{{post.posted_by}}</p>
+                 </div>
+               
+             </div>
+           </a>
+   </div>
+             
+           </div>
+         </div>
+         
+        
+        <div class="container mt-2">
+          <a   >
+  
+         <div class="post-body">
+           
+         <b>{{ post.headline }}</b>
+           <p class="short-body mt-1">
+             <a  id="post-body" >
+             {{ post.body|slice:":144" }}{% if post.body|length > 144 %}...{% endif %}
+           </a>
+           </p>
+             
+           <p class="full-body mt-1">
+             <a  id="post-body" >
+   
+             {{ post.body }}</a> </p>
+           {% if post.body|length > 144 %}
+               <a class="show-more-link">Show more</a>
+           {% endif %}
+           <a class="show-less-link blue" style="display: none; ">Show less</a>
+   
+       </div>
+      </a>
+           
+               {% if post.post_image %}
+               <a >
+         <div class="post_card--creative mt-2" id="ad_img">
+   
+           <img src="{{ post.post_image.url }}">
+          
+           
+       </div> </a>
+     
+       {% endif %}
+         
+        
+       <div class="post_card--summary">
+         <a href="#">
+           <div class="post_card--cta ">
+             <div class="mx-auto mt-2 mb-2">
+               <a href="{{ post.cta_link }}" target="_blank" class="btn btn-outline-danger btn-round px-3">{{post.cta}} <i class="fa-solid fa-chevron-right ml-"></i> </a>
+   
+           </div>
+         </div>
+         </a>
+           <!-- DO NOT CHANGE THIS IMAGE -->
+           <div class="post_card--input--left mt-2 ">
+  
+            <div class="post-icons">
+              <button href="#"  class="  btn btn-light btn-round " data-toggle="modal" data-target="#loginModal">
+                <i class="fa-regular fa-comment"></i>
+                <span class="post-engagement ml-2" >{{ post.comment_count }}</span>
+  
+              </button>
+            </div>
+  
+              <div class=" like row ">
+                
+                
+                <span > 
+                    <button  href="#"  class="  btn btn-light btn-round " data-toggle="modal" data-target="#loginModal" > <i class="fa-regular fa-heart"></i> </button>         
+                </span>
+               
+              
+              <span class="ml-2 mt-2 mr-2" id="vote-count-{{ post.id }}" > {{ post.vote_count }} </span>
+      
+              
+              <span>
+                <button href="#"  class=" btn btn-light btn-round " data-toggle="modal" data-target="#loginModal"> <i class="fa-solid fa-xmark"></i> </button>
+              </span>
+             
+              </div>
+  
+  
+             <div class="post-icons  mr-3">
+              <button href="#"  class="  btn btn-light btn-round " data-toggle="modal" data-target="#loginModal" >
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </button>
+            </div>
+  
+   
+          <!-- DO NOT CHANGE THIS IMAGE -->
+        </div>
+        
+         
+        
+       
+         </div>
+        
+         </div>
+   
+         
+   
+         </div>
+        </div>
+        {%endif%}
+     {% endfor %}
+
+     {% else %}
+     <div class="empty-img text-center"> <img src="{% static 'img/icons/empty.svg' %}" ></div>
+
+     <p class="mt-3 text-center"> There are no posts yet </p>
+
+     {% endif %}
+
+  <!-- END FEED-->
+</div>
+
+
+    </div>
+    
+    
+ 
+    {% if user.is_authenticated %}
+  <div class="content-container">
+    <div class="content content-tab3">
+
+
+         {% for member in members %}
+         {% if member.username != request.user.username %}
+       <div class="row mt-2">
+  
+       
+        
+       <div class="member_list  col-12 "> 
+       
+          <div class="row mt-4">
+          <a href="#">
+
+          <div class="account-avatar mr-2 ">
+            {% if member.avatar %}
+            <img src="{{ member.avatar.url }}"  id="user-main-avatar" class="mt-1">
+              {% else %}
+                <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar" class="mt-1">
+            {% endif %}
+          </div>
+        </a>
+        <a href="{% url 'view_profile' member.user.username %}">
+          <div class="user-details  ">
+            <p><b>{{member.name}}</b> {% if member.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}<br>
+            <small class="blue">@{{ member.user.username }}</small></p>
+          </div>
+          </a>
+          <div class="follow-btn ml-auto mr-3">
+            {% if request.user != member.user.username %}
+            <button class="dropdown-item follow-button  bg-primary text-light btn-round px-3" data-profile-username="{{ member.user.username }}">
+        {% if follows %}
+            Unfollow 
+        {% else %}
+            Follow 
+        {% endif %} 
+    </button>
+          {% endif %}          
+        </div>
+
+        
+
+      </div>
+
+      
+          
+        </div>
+        
+        </div>
+        {%endif%}
+       {% endfor %}
+       <p class="text-center mt-2"><a href="{% url 'members_list' %}"><b>See More </b></a></p>
+       <div class="spacer"></div>
+       
+  <!-- END FEED-->
+
+    </div>
+
+    
+  </div>
+  {%endif%}
+  
+  
+  </div>
+  </div>
+
+</div>
+    
+    
+
+</div>
+
+<div class="modal fade" id="betaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content " >
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span>
+      </button>
+      
+    </div>
+          <div class="modal-body mb-3">
+            <p class="text-center">This feature is currently in testing and may only be available to beta users</p>
+          </div>
+         
+      </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  
+ <div class="col ">
+
+  <div class="container ">
+  <ul class="tabs-bar text-center ">
+    <li id="tab1" class="tab tab-active"><b>Members</b></li>
+
+
+  </ul>
+  <div class=" feed">
+  <div class="input-group main-search mt-1 ">
+
+
+  </div>
+  <div class="app--feed mt-5 ">
+
+ 
+  <div class="content-container">
+
+
+         {% for member in members %}
+         {% if member.username != request.user.username %}
+       <div class="row mt-2">
+  
+       
+        
+       <div class="member_list  col-12 "> 
+       
+          <div class="row mt-4">
+          <a href="#">
+
+          <div class="account-avatar mr-2 ">
+            {% if member.avatar %}
+            <img src="{{ member.avatar.url }}"  id="user-main-avatar" class="mt-1">
+            {% else %}
+                <img src="{% static 'img/default_avatar.jpg' %}"  id="user-main-avatar" class="mt-1">
+            {% endif %}
+          </div>
+        </a>
+        <a href="{% url 'view_profile' member.user.username %}">
+          <div class="user-details  ">
+            <p><b>{{member.name}}</b> {% if member.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}<br>
+            <small class="blue">@{{ member.user.username }}</small></p>
+          </div>
+          </a>
+          <div class="follow-btn ml-auto mr-3">
+            {% if request.user != member.user.username %}
+            <button class="dropdown-item follow-button  bg-primary text-light btn-round px-3" data-profile-username="{{ member.user.username }}">
+        {% if follows %}
+            Unfollow 
+        {% else %}
+            Follow 
+        {% endif %} 
+    </button>
+          {% endif %}          
+        </div>
+
+        
+
+      </div>
+
+      
+          
+        </div>
+        
+        </div>
+        {%endif%}
+       {% endfor %}
+       <p class="text-center mt-2"><button class="btn btn-trans" id="show-more-btn"><b>See More </b></button></p>
+       <div class="spacer"></div>
+       
+  <!-- END FEED-->
+
+    </div>
+
+    
+  </div>
+  
+  
+  </div>
+
+</div>
+    
+    
+
+</div>
+
+{% endblock %}

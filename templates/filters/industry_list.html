@@ -1,0 +1,47 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  
+ <div class="col ">
+
+  <div class="container  ">
+  
+  <div class=" feed ">
+ 
+  <div class="app--feed mt-5 ">
+    
+<span class="row ml-5"><h4 >Explore</h4> <i class="fa-solid fa-arrow-turn-down mt-2 ml-2"></i> </span><br>
+
+     
+      <ul class="industry_list mt-3 ">
+        {% for industry in industries %}
+        <a href="{% url 'industry_filter' industry.0 %}">
+        
+        <li id="topic-link" class="mt-2 ">
+            <i class="fa-solid fa-cube orange mr-2"></i>   <b> {{ industry.1 }}</b>
+          
+            
+        </li>
+        </a>
+        {% endfor %}
+        </ul>
+<div class="spacer"></div>
+  <!-- END FEED-->
+  
+  </div>
+  </div>
+
+</div>
+    
+    
+
+</div>
+
+
+{% endblock %}

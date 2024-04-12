@@ -1,0 +1,103 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+<div class="col">
+    <div class="spacer"></div>
+    <h4 class="text-center">Alerts</h4>
+    <div class="container ">
+	<div class="list-group mt-4">
+    
+    {% if user_alerts %}
+    <ul class="mr-2">
+      
+      {% for alert in user_alerts %}
+        <li  class="list-group-item notification list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <p class="mb-1" >       
+             <a href="{% url 'view_profile' alert.sender.username %}">
+                <span class="account-avatar">
+                  {% if alert.avatar %}
+                 
+                  <img src="{{ alert.avatar.url }}" alt="User Avatar" id="user-main-avatar">
+                  {% else %}
+                      <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                   
+                      {% endif %}
+                </span>
+                <div class="user-details mr-auto ml-2 mt-2">
+                  <p><b>{{alert.poster_full}} </b> {% if sender.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}  
+                    {% if alert.alert_type == 'like' %}
+                    {{ alert.alert_type }}d your post
+                    
+                    {% elif alert.alert_type == 'comment' %}
+
+                    commented on your post
+
+                    {% elif alert.alert_type == 'reply' %}
+
+                    Replied to your comment
+
+                    
+                    
+                    {% elif alert.alert_type == 'delete' %}
+
+                    . The post you reported was found to be in violation of Soconey's Community Guidelines and has been taken down. Thank you for making our community better
+
+                   
+                    
+                    {% elif alert.alert_type == 'keep' %}
+
+                    The post you reported was not found to be in violation of Soconey's Community Guidelines. Thank you for reaching out.
+                    
+                    {% elif alert.alert_type == 'fine' %}
+
+                    . Your post was taken down by comunity moderators for violating Soconey's Community Guidelines. You have been fined 200 SC for this offence. Re-offending might result in account deactivation.
+                    
+                    {% elif alert.alert_type == 'bug' %}
+
+                    . The bug you reported has been neutralized. Thank you for making this platform better
+
+                    {% elif alert.alert_type == 'follow' %}
+
+                     started following you
+
+
+
+                    {%endif%}
+                  </p>
+                </div>
+             </p>
+
+          </a>
+            
+          </div>
+          <small class="grey"> 
+            "  {{ alert.post.body|truncatechars:30   }}" on {{ alert.timestamp|date:"F j, Y H:i" }}
+          
+          </small>
+
+        
+        </li>
+        {% endfor %}
+
+        
+      </ul>
+        
+
+     {% else %}
+     <div class="container">
+       <div class="spacer"></div>
+       <div class="spacer"></div>
+       <p class="text-center mt-5">
+         There are no alerts to show at the moment
+       </p>
+       <div class="spacer"></div>
+     </div>
+    {% endif%}
+
+      </div>
+    </div>
+</div>
+{%endblock%}

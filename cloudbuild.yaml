@@ -1,0 +1,22 @@
+steps:
+  # Checkout the source code from Bitbucket
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'git clone https://gichimu@bitbucket.org/soconey/soconey.git', '.']
+
+  # Install dependencies and prepare your Django application
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/soconey', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/soconey']
+
+  # SSH into your VM instance and pull the latest changes
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['compute', 'ssh', 'instance-20240301-063618', '--command', 'cd /home/gichimumwai1/soconey && git pull']
+
+  # Restart Gunicorn to apply changes
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['compute', 'ssh', 'instance-20240301-063618', '--command', 'sudo systemctl restart gunicorn']
+
+  # Optional: Perform additional tasks like running database migrations, collecting static files, etc.
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['compute', 'ssh', 'instance-20240301-063618', '--command', 'cd /home/gichimumwai1/soconey && python manage.py migrate']

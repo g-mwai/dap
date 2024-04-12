@@ -1,0 +1,46 @@
+{% extends '../app/profile_base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="col">
+    <div class="container mt-5 mb-5">
+        <div class="spacer"></div>
+        <h2 class=" text-center ">Edit Profile</h2>
+
+        
+      
+      </div>       
+        <form method="post" enctype="multipart/form-data" class="mt-5 text-center">
+          {% csrf_token %}
+          <div class="edit-username mt-5 text-center">
+            <div class="avatar-div">
+                <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}" alt="User Avatar" id="user-avatar" >
+                <img id="selected-avatar" src="" alt="Selected Avatar" style="display: none;">
+
+              </div>
+            
+              <div class="profile-edit-btns mx-auto mt-3">
+                <!-- Replace the file input with a button -->
+                <label for="avatar-input" class="btn btn-outline-dark upload-btn">
+                    Upload
+                </label>
+                <!-- Keep the hidden file input for functionality -->
+                <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+
+            </div>
+          {{ form.as_p }}
+
+          <button type="submit" class="btn btn-rounded">Save Changes</button>
+        </form>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+{% endblock%}

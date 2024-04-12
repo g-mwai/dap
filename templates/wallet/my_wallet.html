@@ -1,0 +1,233 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+<!-- Feed Starts -->
+
+
+
+<div class="col ">
+  <div class="container">
+    <ul class="tabs-bar ">
+      <li id="tab1" class="tab tab-active"><b>Wallet</b></li>
+      <li id="tab2" class="tab"> <b>Tokens</b></li>
+  
+  
+    </ul><br>
+    <div class="app--feed mt-5">
+      <div class="content-container">
+        <div class="content content-tab1 content-active">
+     {% if wallet %}
+  <div class="wallet-feed mx-auto">
+    <div class="row mt-3">
+      <div class="col-12  wallet-ad text-center ">
+        <b> Wallet Address: {{wallet.address}} </b>
+      </div>
+    </div>
+
+    <div class="row mt-3 ">
+
+      <div class="col-6  text-center">
+        <div class="wallet-cards">
+          <div class="w-icon icon-size mb-2">
+            <img src="{% static 'img/soconium.png'%}" >
+          </div>
+          <b>Earned:</b><br>
+          SC {{wallet.total_earn}} 
+        </div>
+      </div>
+
+      <div class="col-6   text-center">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/out.png'%}">
+          </div>
+          <b> Spent: </b> <br>
+          SC {{wallet.total_spend}} 
+        </div>
+      </div>
+
+    </div>
+
+<!-- 
+    <div class="row mt-3">
+      <div class="col-6  text-center text-primary">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/win.png'%}">
+          </div>
+          <b> Wins:</b><br>
+          {{wallet.wins}} 
+        </div>
+      </div>
+
+      <div class="col-6   text-center text-danger">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/loss.png'%}">
+          </div>
+          <b> Fines:</b><br>
+          {{wallet.losses}} 
+        </div>
+      </div>
+
+    </div> -->
+    
+    <div class="row mt-3">
+
+      <div class="col-6   text-center ">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/loss.png'%}">
+          </div>
+          <b> Fines:</b><br>
+          SC {{wallet.losses}} 
+        </div>
+      </div>
+
+      <div class="col-6   text-center">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/balance.png'%}">
+          </div>
+          <b> Balance:</b><br>
+        
+          SC {{wallet.balance}} 
+        </div>
+      </div>
+
+      <!-- <div class="col-6  text-center  ">
+        <div class="wallet-cards">
+          <div class="w-icon mb-2">
+            <img src="{% static 'img/icons/asset.png'%}">
+          </div>
+          <b> Net Worth: </b><br>
+          {{wallet.balance}} Coins
+        </div>
+      </div> -->
+
+
+    </div>
+
+   
+
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <span class="mt-2"><small>Tell your friends about Soconey and get SC rewards</small></span>
+        <div class="wallet-btns mt-2">
+          <a href="#" class="btn btn-warning btn-round ml-2 px-3" data-toggle="modal" data-target="#EarnModal"> Reward <i class="fa-solid fa-plus"></i></a>
+        </div>
+      </div>
+      <!-- <div class="row mt-5 liab-text col-10 mx-auto ">
+        <p class="text-center grey">
+        <i class="fa-solid fa-circle-info "></i> 
+        <small>You are liable to pay up to SC 200 in fines if found in violation of community guidelines.</small>
+        </p>
+      </div> -->
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-img text-center"> <img src="{% static 'img/icons/empty.svg' %}" ></div>
+
+  <p class="mt-3 text-center"> You need to activate your wallet in order to post on Soconey. click the button below to do so. </p>
+ <button class="btn btn-outline-primary btn-round px-3"> Activate</button>
+  {% endif %}
+<div class="spacer"></div>
+  </div>
+  </div>
+
+  <div class="content-container">
+    <div class="content content-tab2 ">
+      
+
+      <div class="row mt-3">
+
+        <div class="col-6   text-center ">
+          <div class="wallet-cards">
+            <p class="text-primary"> <b>+ SC 200 </b></p>
+
+            <div class="w-icon mb-2">
+              <img src="{% static 'img/gold.png'%}" >
+            </div>
+            <p><b>Price:</b> USD 1</p>
+            <a href="#" class="btn btn-outline-dark btn-round px-4">Buy</a>
+          </div>
+        </div>
+  
+        <div class="col-6   text-center">
+          <div class="wallet-cards">
+            <p class="text-primary"> <b>+ SC 700 </b></p>
+
+            <div class="w-icon mb-2">
+              <img src="{% static 'img/gold.png'%}" >
+            </div>
+            <p><b>Price:</b> USD 2</p>
+            <a href="#" class="btn btn-outline-dark btn-round px-4">Buy</a>
+          </div>
+        </div>
+        </div>
+        <div class="row mt-3">
+
+          <div class="col-6   text-center ">
+            <div class="wallet-cards">
+              <p class="text-primary"> <b>+ SC 2.5k </b></p>
+  
+              <div class="w-icon mb-2">
+                <img src="{% static 'img/gold.png'%}" >
+              </div>
+              <p><b>Price:</b> USD 4</p>
+              <a href="#" class="btn btn-outline-dark btn-round px-4">Buy</a>
+            </div>
+          </div>
+    
+          <div class="col-6   text-center">
+            <div class="wallet-cards">
+              <p class="text-primary"> <b>+ SC 10k </b></p>
+  
+              <div class="w-icon mb-2">
+                <img src="{% static 'img/gold.png'%}" >
+              </div>
+              <p><b>Price:</b> USD 10</p>
+              <a href="#" class="btn btn-outline-dark btn-round px-4">Buy</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      </div>
+
+ 
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="EarnModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+  <div class="modal-body mb-4"> 
+    <p class="text-center"><b>Invite on</b></p>
+        <div class="row  mt-1">
+          <div class="mx-auto">
+          <button class="btn btn-light btn-round"><i class="fa-brands fa-facebook-f blue "></i></button>
+          <button class="btn btn-light btn-round"><i class="fa-brands fa-x-twitter "></i></button>
+          <button class="btn btn-light btn-round"><i class="fa-brands fa-linkedin blue "></i></button>
+          <button class="btn btn-light btn-round"><i class="fa-brands fa-whatsapp"></i></button>
+          <button class="btn btn-light btn-round"><i class="fa-brands fa-reddit-alien"></i></button>
+
+        </div>
+        </div>
+              
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Feed Ends -->
+{% endblock %}

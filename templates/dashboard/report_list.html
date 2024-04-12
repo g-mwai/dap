@@ -1,0 +1,339 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="spacer"></div>
+<div class="container mt-5">
+    <ul class="form-tabs-bar  text-center">
+        <li id="tab1" class="form-tab form-tab-active"><b>Posts</b></li>
+        <li id="tab2" class="form-tab"> <b>Comments</b></li>
+        <li id="tab3" class="form-tab"> <b>Gigs</b></li>
+        <li id="tab4" class="form-tab"> <b>Bugs</b></li>
+
+      </ul>
+  <div class="form-content-container ">
+    <div class="form-content form-content-tab1 form-content-active">
+        <div class="content">
+            <div class="container-fluid">
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card ">
+                            <div class="card-header ">
+                                <h4 class="card-title text-center">Posts</h4>
+
+                            
+                            </div>
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">Author</th>
+                                                    <th scope="col">Votes</th>
+                                                    <th scope="col">Reports</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for post in posts_obj %}
+                                                
+                                                <tr>
+                                                    <td>{{ post.posted_by.username }}</td>
+                                                    <td>{{ post.vote_count }}</td>
+                                                    <td>{{ post.report_count }}</td>
+                                                    <td class="text-primary"><a href="{% url 'reported_post' post.id %}" class="btn btn-primary">View</a></td>
+                                                    
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <!-- Pagination links -->
+                                    {% if posts_obj.has_other_pages %}
+                                    <ul class="pagination">
+                                        {% if posts_obj.has_previous %}
+                                            <li class="page-item"><a class="page-link" href="?post_page={{ posts_obj.previous_page_number }}">Previous</a></li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                        {% endif %}
+                                        {% for num in posts_obj.paginator.page_range %}
+                                            {% if posts_obj.number == num %}
+                                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                            {% else %}
+                                                <li class="page-item"><a class="page-link" href="?post_page={{ num }}">{{ num }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if posts_obj.has_next %}
+                                            <li class="page-item"><a class="page-link" href="?post_page={{ posts_obj.next_page_number }}">Next</a></li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span class="page-link">Next</span></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                                    
+                                            </div>
+                                         
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="form-content-container ">
+        <div class="form-content form-content-tab2 ">
+            <div class="content">
+                <div class="container-fluid">
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card ">
+                                <div class="card-header ">
+                                    <h4 class="card-title text-center">Comments</h4>
+    
+                                
+                                </div>
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th scope="col">Author</th>
+                                                        <th scope="col">Votes</th>
+                                                        <th scope="col">Reports</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for comment in comments_obj %}
+                                                    
+                                                    <tr>
+                                                        <td>@{{ comment.comment_by.username }}</td>
+                                                        <td>{{ comment.vote_count }}</td>
+                                                        <td>{{ comment.report_count }}</td>
+                                                        <td class="text-primary"><a href="{% url 'reported_comment' comment.id %}" class="btn btn-primary">View</a></td>
+                                                        
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                        <!-- Pagination links -->
+                                        {% if comments_obj.has_other_pages %}
+    <ul class="pagination">
+        {% if comments_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?comment_page={{ comments_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+        {% for num in comments_obj.paginator.page_range %}
+            {% if comments_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?comment_page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if comments_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?comment_page={{ comments_obj.next_page_number }}">Next</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+        {% endif %}
+    </ul>
+{% endif %}
+                                        
+                                                </div>
+                                             
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                            </div>
+    
+                                        </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="form-content-container ">
+            <div class="form-content form-content-tab3 ">
+                <div class="content">
+                    <div class="container-fluid">
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card ">
+                                    <div class="card-header ">
+                                        <h4 class="card-title text-center">Gigs</h4>
+        
+                                    
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                              <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col">Author</th>
+                                                            <th scope="col">Reports</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for gig in gigs_obj %}
+                                                        
+                                                        <tr>
+                                                            <td>{{ gig.posted_by.username }}</td>
+                                                            <td>{{ gig.report_count }}</td>
+                                                            <td class="text-primary"><a href="{% url 'reported_gig' gig.id %}" class="btn btn-primary">View</a></td>
+                                                            
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
+                                            <!-- Pagination links -->
+                                            {% if gigs_obj.has_other_pages %}
+    <ul class="pagination">
+        {% if gigs_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?gig_page={{ gigs_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+        {% for num in gigs_obj.paginator.page_range %}
+            {% if gigs_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?gig_page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if gigs_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?gig_page={{ gigs_obj.next_page_number }}">Next</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+        {% endif %}
+    </ul>
+{% endif %}
+                                            
+                                                    </div>
+                                                 
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+        
+                                            </div>
+                </div>
+            </div>
+            </div>
+
+
+        
+            <div class="form-content-container ">
+                <div class="form-content form-content-tab4 ">
+                    <div class="content">
+                        <div class="container-fluid">
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card ">
+                                        <div class="card-header ">
+                                            <h4 class="card-title text-center">Bugs</h4>
+            
+                                        
+                                        </div>
+                                        <div class="card-body ">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                  <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <thead class="thead-dark">
+                                                            <tr>
+                                                                <th scope="col">Reporter</th>
+                                                                <th scope="col">details</th>
+                                                                <th scope="col">Priority</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for bug in bugs_obj %}
+                                                            
+                                                            <tr>
+                                                                <td>{{ bug.user.username }}</td>
+                                                                <td>{{ bug.body | slice:":30" }}</td>
+                                                                <td>
+                                                                    <div class=" ml-auto topic_badge">
+                                                                        {% if bug.priority == 'low' %}
+                                                                        <a href="#" class="badge badge-pill badge-secondary topic_badge mr-2">{{bug.priority}}</a> 
+                                                                        {% elif bug.priority == 'moderate' %}
+                                                                        <a href="#" class="badge badge-pill badge-warning topic_badge mr-2">{{bug.priority}}</a> 
+                                                                        {% elif bug.priority == 'high' %}
+                                                                        <a href="#" class="badge badge-pill badge-danger topic_badge mr-2">{{bug.priority}}</a> 
+                                                                        {%endif%}
+                                                                      </div>
+
+                                                                </td>
+                                                                <td class="text-primary"><a href="{% url 'reported_bug' bug.id %}" class="btn btn-primary">View</a></td>
+                                                                
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                                <!-- Pagination links -->
+                                                {% if bugs_obj.has_other_pages %}
+                                                <ul class="pagination">
+                                                    {% if bugs_obj.has_previous %}
+                                                        <li class="page-item"><a class="page-link" href="?bug_page={{ bugs_obj.previous_page_number }}">Previous</a></li>
+                                                    {% else %}
+                                                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                                    {% endif %}
+                                                    {% for num in bugs_obj.paginator.page_range %}
+                                                        {% if bugs_obj.number == num %}
+                                                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                                        {% else %}
+                                                            <li class="page-item"><a class="page-link" href="?bug_page={{ num }}">{{ num }}</a></li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if bugs_obj.has_next %}
+                                                        <li class="page-item"><a class="page-link" href="?bug_page={{ bugs_obj.next_page_number }}">Next</a></li>
+                                                    {% else %}
+                                                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                                                    {% endif %}
+                                                </ul>
+                                            {% endif %}
+                                                
+                                                        </div>
+                                                     
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+            
+                                                </div>
+                    </div>
+                </div>
+                </div>
+       </div>                       
+
+{% endblock %}
+
+
+
+
+

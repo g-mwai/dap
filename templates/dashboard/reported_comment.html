@@ -1,0 +1,330 @@
+{% extends '../app/base.html' %}
+
+{% block content %} 
+     
+
+{% load static %}
+
+ <!-- Feed Starts -->
+  
+ <div class="col">
+  
+  <div class="row detail-bar">
+    <div class="mt-3">
+     <h5><a href="{% url 'home' %}"><i class="fa fa-arrow-left mr-2"></i> Feed </a> </h5>
+    </div>
+  </div>
+
+
+  <div class=" feed details__feed">
+  
+ 
+
+      <div class="app--feed mt-5">
+
+
+        <div class="detail__content ">
+
+         
+
+          <div class="row mt-5">
+            
+            <div class=" col-12 ">
+        
+              <div class="mt-4 ">
+                <div class="row mr-auto blue ml-3"><small>Posted on {{ comment.timestamp|date:"d, M - Y" }}
+                </small> 
+                 </div>  
+
+                 <div class="row">
+       
+                  <div class="ml-auto mr-4 mb-2">
+                     <div class="card-action">
+                 <div class="dropdown">
+                 <a href="javascript:void();" class="dropdown-toggle-nocaret" data-toggle="dropdown">
+                  <i class="fa-solid fa-ellipsis"></i>
+            
+                 </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    {% if request.user != post.comment_by %}
+                    {% if user.is_authenticated %}
+                    <button class="dropdown-item follow-button btn btn-light" data-profile-username="{{ comment.comment_by.username }}">
+                        {% if request.user in post.comment_by.followers.all %}
+                            Unfollow @{{ comment.comment_by.username }}
+                        {% else %}
+                            Follow @{{ comment.comment_by.username }}
+                        {% endif %}
+                    </button>
+                {% endif %}
+          
+                  {% endif %}
+            
+                    {% if request.user == post.comment_by %}
+                     <button class="dropdown-item" onclick="confirmDelete({{ comment.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+                    {% endif %}
+            
+                    {% if request.user != post.comment_by %}
+                    <button class="dropdown-item report-button" data-toggle="modal" data-report-id="{{ comment.id }}" data-target="#ReportModal">Report  <i class="fa-solid fa-flag red ml-1"></i></button>
+                    {% endif %}
+            
+                   </div>
+                  </div>
+                
+                 </div>
+                </div>
+              </div>
+
+                 </div>
+                 <div class="follow-card  mt-4">
+                  <div class="row">
+                  <a href="{% url 'view_profile' comment.comment_by.username %}">
+    
+                  <div class="account-avatar">
+                    {% if comment.avatar %}
+                    <img src="{{ comment.avatar.url }}" alt="User Avatar" id="user-main-avatar">
+                    {% else %}
+                        <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                    {% endif %}
+                  </div>
+                </a>
+                <a href="{% url 'view_profile' comment.comment_by.username %}">
+                  <div class="user-details ml-2">
+                    <p><b>{{comment.poster_full}}</b><br>
+                    <small class="">{{ comment.profile.followers.count }} Followers</small></p>
+                  </div>
+                  </a>
+                  
+              </div>
+                  
+              </div>
+
+              
+              <div class="mt-1 ml-3 mr-3"><h5><b>{{comment.headline | capfirst}} </b></h5></div>
+
+          <div class="mt-1 ml-3 mr-3"><p>{{comment.body}} </p></div>
+
+  
+          {% if comment.post_type == "bet" %}
+          <a href="#">
+            <div class="post_card--cta ">
+              <div class="text-center mt-2 ">
+                <button class="btn btn-outline-primary px-3">Bet Yes</button>
+            <button class="btn btn-outline-danger px-3">Bet No</button>
+            </div>
+          </div>
+          </a>
+        
+          {%endif%}
+                
+            
+            
+          {% if comment.post_image %}
+             
+          <div class="comment_img mt-3">
+
+           <img src="{{ comment.post_image.url }}">
+ 
+  
+          </div>
+
+          {% endif %}
+          
+
+       
+          
+          <div class="post_card--summary mt-3 mb-2">
+           
+          <div class="post_card--input--left mt-2 ">
+
+            <div class="post-icons">
+              <button class="comment-button btn btn-trans" data-post-id="{{ post.id }}">
+                <i class="fa-regular fa-comment"></i>
+                <span class="post-engagement ml-2">{{ comment.comment_count }}</span>
+  
+              </button>
+            </div>
+
+          <div class="post-icons row mx-auto ">
+              {% if user.is_authenticated %}
+  
+              <form action="{% url 'upvote_post' comment.id %}" method="post">
+                {% csrf_token %}
+              <span class="post-icons "> 
+                  <button  class="btn btn-trans upvote-button {% if user in post.likes.all or comment.id in clicked_buttons %} clicked-button{% endif %}" data-post-id="{{ comment.id }}"> <i class="fa-regular fa-thumbs-up"></i> </button>         
+              </span>
+              </form>
+              <span class="ml-2 mr-2 mt-2" id="vote-count-{{ comment.id }}" > {{ comment.vote_count }} </span>
+
+              <form action="{% url 'downvote_post' comment.id %}" method="post">
+                {% csrf_token %}
+              <span class="post-icons ">
+                <button  class="btn btn-trans downvote-button {% if user in post.dislikes.all %} clicked-button{% endif %}" data-post-id="{{ comment.id }}"> <i class="fa-regular fa-thumbs-up fa-rotate-180"></i> </button>
+              </span>
+              </form>
+
+              {% endif %}
+          </div>
+
+        
+   
+        <!-- DO NOT CHANGE THIS IMAGE -->
+      </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        
+
+
+        </div>
+
+
+        
+        
+    <div class="moderation ml-2 ">
+ 
+        <div class="comment__counter text-center mt-3 row">
+          <form action="{% url 'delete_reported_comment' comment.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+                    
+        <form method="post" action="{% url 'keep_reported_comment' comment.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn ml-2 btn-primary">Keep</button>
+        </form>
+            </div>
+
+      {% for report in post_reports %}
+      <div class=" comment-card mt-3 ">
+          <div class=" row">
+            <a href="{% url 'view_profile' report.user.username %}">
+
+            <div class="lefter mr-auto">
+              
+              
+              <span class="  ml-2 ">
+                <b>@{{report.user.username}}</b> {% if report.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 18px;height: auto; margin-bottom: 3px;"></span> {% endif %}                  
+                 <span class=" ml-4 comment-time"> {{report.whenpublished}}</span> 
+
+              </span>
+            </div>
+            </a>
+             
+          </div> 
+
+        <div class="row  mt-3  ml-2">
+          <p>{{report.content}} </p>
+        </div>
+        
+       
+
+      
+      </div>
+
+      
+
+       
+      {% endfor %}
+    </div>
+  <!-- END FEED-->
+
+
+    
+  </div>
+    
+  
+    
+
+</div>
+<br/>
+
+
+</div>
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" id="token-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body ml-2 mb-2">
+       <p> This action is not reversible. Your post will be deleted permanently from Soconey. Do you wish to proceed?</p>
+       <div class="row ">
+        <div class="mx-auto">
+          <button class="btn btn-danger" id="deleteConfirmButton">Delete</button>
+          <button class="btn btn-outline-dark ml-1" data-dismiss="modal">Cancel</button>
+      </div>
+       </div>
+              
+
+    </div>
+
+    <div class="modal-footer">
+      
+    </div>
+  </div>
+</div>
+</div> 
+
+<!-- Success Message Modal -->
+<div class="modal fade" id="postDeletedModal" tabindex="-1" role="dialog" aria-labelledby="postDeletedModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content delete">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center"> The post has been successfully deleted. </p>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content comment-message mb-2">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p id="messageText" class="text-center">This is a message.</p>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content post-success" >
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+          <div class="modal-body mb-3">
+              <p id="successMessage" class="text-center">Your post was successful. </p>
+
+          </div>
+         
+      </div>
+  </div>
+</div>
+
+
+{%endblock%}
+
+<!-- Feed Ends -->

@@ -1,0 +1,271 @@
+{% load static %}
+{% load socialaccount %}
+{% load crispy_forms_tags %}         
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>Soconey - Together We Rise</title>
+    <link rel="stylesheet" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" >
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/landing.css'%}">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" >
+
+</head>
+
+
+
+<body>
+  
+
+<nav class="navbar navbar-expand-md navbar-light bg-light ">
+  <div class="container-fluid text-dark">
+    <a class="navbar-brand d-md-none" href="/">
+      <div class="mx-auto d-block text-center order-0   logo " >
+        <img src="{% static 'img/logo-dark.png'%}" alt="">
+      
+    </div>
+      </a>
+   
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        
+        
+        <a class="navbar-brand d-none d-md-block" href="/">
+          <div class="mx-auto d-block text-center order-0   logo " >
+            <img src="{% static 'img/soconium.png'%}" alt="">
+          
+        </div>
+          </a>
+        
+          
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- header ends -->
+{%block content %}
+
+{%endblock%}
+<!--Content ends-->
+  
+
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto">
+          <p>Don't have an account? <a href="#" data-toggle="modal" data-dismiss="modal" data-target="#SignupModal">Sign up</a> </p>
+          <hr>
+          <form method="POST" class="text-center " action="{% url 'landing' %}">
+          
+          
+          {% csrf_token %}
+          {{ login_form|crispy }}
+
+          
+           <button type="submit" class="btn btn-danger btn-block waves-effect waves-light ">Log In</button><hr>
+           <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-block waves-effect waves-light  mt-2"><img src="{% static 'img/google-i.png' %}" class="google_icon  mr-1"> Continue with Google </a>  
+
+          
+         
+          
+           </form>
+           <div class="text-center mt-1 ">
+            <!-- <a href="#" class="btn btn-outline-danger px-3 mt-2" id="google-connect"> <span><i class="fa-brands fa-google"></i> Continue with Google</span></a> -->
+            <!-- <a href="#" class="btn btn-outline-dark px-3 mt-2" id="google-connect"> <span><i class="fa-brands fa-apple"></i> Login with Apple</span></a> -->
+
+           </div>
+          </div>
+      <div class="modal-footer">
+      
+        <div class="mx-auto">
+          <a href="{% url 'request_password_reset' %}">Forgot Password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Your modal HTML code -->
+<div class="modal fade" id="SignupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+
+          <div class="modal-body mx-auto">
+              <p>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Log In</a> </p>
+              <!-- <form id="signupForm" method="POST" class="text-center" action="{% url 'landing' %}">
+                {% csrf_token %}
+                {{ signup_form|crispy }}
+                <div id="username-error" class="text-danger" style="display: none;"></div>
+            
+                <button type="submit" class="btn btn-danger px-3">Sign Up</button> or<br>
+                
+                
+            </form> -->
+
+            <div class="text-center mt-2 ">
+              <a href="{% url 'register' %}" class="btn btn-outline-dark  btn-block waves-effect waves-light mt-2" > <i class="fa-regular fa-envelope mr-2"></i> Signup with Email </a>
+              <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-block waves-effect waves-light  mt-2"><img src="{% static 'img/google-i.png' %}" class="google_icon mr-1"> Continue with Google </a>  
+            </div>
+            <br>
+              <div id="signupErrors" class="text-danger text-center"></div> <!-- Error messages will be displayed here -->
+          </div>
+          
+
+          <div class="modal-footer">
+              <div class="mx-auto">
+                  <a href="{% url 'request_password_reset' %}">Forgot Password?</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+<section class="footer ">
+
+ 
+  <div class="footer-menu text-center  mt-3 ">
+    <a href="{% url 'policy' 'guidelines' %}"> Community Guidelines</a> - <a href="{% url 'manifesto'%}"> Manifesto </a> - <a href="{% url 'policy' 'privacy' %}"> Privacy</a> - <a href="{% url 'policy' 'terms' %}"> Terms of Service</a> - <a href="{% url 'policy' 'license' %}" >License</a><br> &copy <script>document.write(new Date().getFullYear())</script> Soconey ™
+
+  </div>
+</section>
+
+
+<div class="fixed-bottom-menu ">
+  {% if user.is_authenticated %}
+  <div class="fixed-bottom-menuــrow row ">
+    <a href="{% url 'home'%}" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/home.png'%}"/>
+      </span>
+      <h6 class="mt-1">Home</h6>
+    </a>
+  
+    <a href="{% url 'market'%}" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/shop.png'%}"/>
+      </span>
+      <h6 class="mt-1">Market</h6>
+    </a>
+    
+    <a href="#" title=""  data-toggle="modal" data-target="#StoryModal" class="fixed-bottom-menu__a post-sm">
+      <span class="main-cta">
+        <img src="{% static 'img/logo.png'%}"/>
+      </span>
+      <h6 class="mt-1">POST</h6>
+    </a>
+    <a href="#" title="" data-toggle="modal" data-target="#SearchModal"  class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/search.png'%}"/>
+      </span>
+      <h6 class="mt-1">Search </h6> 
+    </a>
+
+    <div class="card-action fixed-bottom-menu__a ">
+      <div class="dropdown dropdown-toggle-nocaret ">
+<a href="javascript:void();" title=""   data-toggle="dropdown">
+  <span class="" id="more_btn">
+    <img src="{% static 'img/icons/more.png'%}"/> 
+  </span><div class="notis-badge-mobile"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <p >{{alerts_c}}</p></span>{% endif %}</div>
+  <h6 class=" mt-1">More</h6>
+</a>
+             <div class="dropdown-menu more-dropdown dropdown-menu-right">
+              <a class="dropdown-item" href="{% url 'my_wallet' %}"><i class="fa-solid fa-wallet mr-2 "></i> Wallet</a>
+
+        <a class="dropdown-item" href="{% url 'bookmark_list'%}"><i class="fa-regular fa-bookmark mr-2 "></i> Bookmarks</a>
+        <a class="dropdown-item" href="{% url 'view_alerts'%}"><i class="fa-regular fa-bell mr-2 "></i> Alerts  {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> </span>{% endif %}</a> 
+
+       <a class="dropdown-item" href="{% url 'settings'%}"><i class="fa-solid fa-gear mr-2 "></i> Settings</a>
+       <a class="dropdown-item kofi-mobi" href="#" data-toggle="modal" data-target="#TipModal"><i class="fa-solid fa-mug-hot orange mr-2"></i> Coffee </a>
+
+        </div>
+</div>
+</div>
+    
+
+  </div>
+  {% else%}
+  <div class="fixed-bottom-menuــrow row ">
+    <a data-toggle="modal" data-target="#loginModal" href="#" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/home.png'%}"/>
+      </span>
+      <h6 class="mt-1">Home</h6>
+    </a>
+  
+    <a data-toggle="modal" data-target="#loginModal" href="#" title="" class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/shop.png'%}"/>
+      </span>
+      <h6 class="mt-1">Market</h6>
+    </a>
+    
+    <a data-toggle="modal" data-target="#loginModal" href="#" class="fixed-bottom-menu__a post-sm">
+      <span class="main-cta">
+        <img src="{% static 'img/logo.png'%}"/>
+      </span>
+      <h6 class="mt-1">POST</h6>
+    </a>
+    <a data-toggle="modal" data-target="#loginModal" href="#"  class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/search.png'%}"/>
+      </span>
+      <h6 class="mt-1">Search </h6> 
+    </a>
+
+    <a data-toggle="modal" data-target="#loginModal" href="#"  class="fixed-bottom-menu__a">
+      <span class="">
+        <img src="{% static 'img/icons/more.png'%}"/>
+      </span>
+      <h6 class="mt-1">More </h6> 
+    </a>
+
+  
+    {%endif%}
+    
+
+  </div>
+</div>
+</body>
+ <!-- Jquery, Popper, Bootstrap -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="{% static 'js/popper.min.js'%}"></script>
+ <script src="{% static 'js/bootstrap.min.js'%}"></script>
+ 
+ <script>
+ $(".tab").click(function(){
+     $(".tabs-bar").find(".tab-active").removeClass("tab-active");
+     $(".content-container").children().hide();
+     $(this).addClass("tab-active");
+     $(".content-" + this.id).show();
+ })
+ 
+ 
+
+ </script>
+
+
+</html>
+

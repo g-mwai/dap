@@ -1,0 +1,247 @@
+{% extends '../app/base.html' %}
+
+{% block content %} 
+     
+
+{% load static %}
+
+ <!-- Feed Starts -->
+  
+ <div class="col">
+  
+ 
+
+  <div class=" feed details__feed">
+  
+ 
+
+      <div class="app--feed">
+
+    
+      <!-- 1st post -->
+      <div class="row ">
+
+        
+        
+       <div class="post_card  mb-3 col-12"> 
+         <div class="row">
+       
+        <div class="ml-auto mr-3 mb-2">
+           <div class="card-action">
+       <div class="dropdown">
+       <a href="javascript:void();" class="dropdown-toggle-nocaret" data-toggle="dropdown">
+        <i class="fa-solid fa-ellipsis"></i>
+  
+       </a>
+        <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="#"><i class="fa-solid fa-trash-can red"></i> Delete </a>
+        <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-triangle-exclamation red"></i> Report </a>
+        <a class="dropdown-item" href="javascript:void();"> <i class="fa-solid fa-share"></i> Share</a>
+  
+  
+         </div>
+        </div>
+      
+       </div>
+      </div>
+    </div>
+     
+
+    {% if post_detail.post_image %}
+             
+    <div class="post_card--creative mt-2">
+
+      <img src="{{ post_detail.post_image.url }}">
+     
+      
+  </div>
+
+  {% endif %}
+  <div class="mt-4"><h5>{{post_detail.headline}} </h5>
+   <div class="row ml-1"><small>posted by @{{post_detail.posted_by}}  </small> <p class="ml-auto mr-3"><i class="fa-regular fa-clock red"></i> . {{post_detail.whenpublished}} </p></div>
+    </div>  
+          
+             
+    
+      
+        </div>
+        
+        </div>
+        <div class="detail__content">
+          <div class="row">
+            <div class="col-2 col-lg-1 col-md-1 col-sm-1 ">
+              <div class="votes-detail text-center">
+              <div class="post-icons like ">
+                <span> 
+                  {% if request.user in post_detail.likes.all %}
+      
+                    <a name="{{ post.id }}"  class="likin" id="co"><i class="fa-solid fa-play fa-rotate-270 blue"></i></a>
+                    {% else %}
+                  
+                    <a name="{{ post.id }}"  class="likin" id="co"><i class="fa-solid fa-play fa-rotate-270 blue"></i></a>         
+                    {% endif %}
+                </span>
+              </div>
+              <div class="" id="like_count"> {{ post_detail.total_likes }} </div>
+      
+              <div class="post-icons ">
+                <i class="fa-solid fa-play fa-rotate-90 blue"></i>
+              </div>
+            </div>
+            </div>
+            <div class=" col-10 col-lg-11 col-md-11 col-sm-11">
+          
+          <div class="mt-1"><p>{{post_detail.body}} </p></div>
+          <div class="post_card--brand mt-4">
+            <div class="brand__info">
+              <!-- Post Company Name (Cumulus by default) and Sponsored or Organic post (remove Sponsored if Organic Post) -->
+          
+              <div class="name-tag ">
+  
+                
+                <div class="follow-card ml-3 mt-3">
+                  <div class="row">
+                  <div class="account-avatar">
+                    <img src="{% static 'img/avatar.jpg'%}" c alt="">
+                  </div>
+                  <div class="user-details ml-2">
+                    <p><b>{{post_detail.poster_full}}</b><br>
+                    <small class="">{{ post_detail.posted_by.following.count }} Followers</small></p>
+                  </div>
+                  <div class="follow-btn ml-5">
+                    <button class="btn btn-dark btn-rounded px-3 ml-2">Follow</button>
+                  </div>
+              </div>
+                  
+              </div>
+    
+              
+              </div>
+            </div>
+          </div>
+          
+          <div class="post_card--summary">
+            <!-- <a href="#">
+              <div class="post_card--cta">
+                <div class="price mr-2">
+                <span>
+                  <b>Tip Creator</b>
+                </span>
+              </div>
+                <span><button class="btn btn-outline-danger btn-rounded px-"> TIP </button></span>
+              </div>
+            </a> -->
+            <div class="post_card--input row ">
+              <!-- DO NOT CHANGE THIS IMAGE -->
+              <div class="post_card--input--left ">
+             
+                 <div class="post-icons  ml-4">
+                  <div class="card-action">
+              <div class="dropdown">
+              <a href="javascript:void();" class=" dropdown-toggle-nocaret" data-toggle="dropdown">
+                <i class="fa-solid fa-share"></i>
+                <span class="post-engagement">13</span>
+                </a>
+               <div class=" dropdown-menu dropdown-menu-top">
+               <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-square-plus "></i>  Repost</a>
+               <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-quote-right"></i>  Quote</a>
+                </div>
+               </div>
+              </div>
+             </div>
+      
+                  <div class="post-icons  ml-4">
+                <i class="fa-regular fa-comment "></i>
+                <span class="post-engagement">{{post.comment_count}}</span>
+              </div>
+            
+      
+             <div class="post-icons ml-4">
+              <i class="fa-regular fa-bookmark"></i>
+              <span class="post-engagement"></span>
+            </div>
+      
+            
+      
+              <!-- DO NOT CHANGE THIS IMAGE -->
+            </div>
+           
+            
+           
+          </div>
+          
+            </div>
+          </div>
+        </div>
+        </div>
+
+    <div class="engagement pt-5">
+    <div class="comment-form ">
+      <form method="POST" class="text-center ">
+        {% csrf_token %}
+        <div class="col-12">
+        <span class="ml-3">          
+          {{ new_comment_form.comment}}
+        </span>
+        <button type="submit" class="btn btn-dark "><i class="fa fa-arrow-right"></i></button>
+      </div>
+      </form>
+      </div>
+
+      {% for comment in post_comments %}
+      <div class=" reply-card  ml-3 mt-5 mr-3">
+          <div class="  ml-2 row">
+            <div class="row ml-2">
+              <img src="{% static 'img/avatar.jpg'%}" alt="">
+              <p class="ml-3 ">
+                <b>{{comment.poster_full}}</b>  
+                <span class=" ml-4 comment-time"> {{comment.whenpublished}}</span> 
+                <br>
+                <span class="blue"><i class=" fa-solid fa-arrow-turn-up fa-rotate-90"></i> replying to @{{comment.related_poster}} 
+                </span>
+              </p>
+
+            </div>
+        
+            
+          </div> 
+
+        <div class="row ml-2  ">
+          <p>{{comment.comment}} </p>
+        </div>
+        
+        <div class="row reply-buttons ml-2">
+          <span class="post-icons">
+            <i class="fa-solid fa-heart"></i>
+            <span class=" reply-stats ">300</span>
+          </span>
+         
+          <span class="post-icons ml-3">
+            <i class="fa-regular fa-comment"></i>
+            <span class=" reply-stats">40</span>
+
+          </span>
+
+          <span class="post-icons ml-3  ">
+            <i class="fa-solid fa-circle-plus "></i>
+            <span class=" reply-stats">9</span>
+          </span>
+         
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  <!-- END FEED-->
+
+
+    
+  </div>
+    
+  
+    
+
+</div>
+</div>
+{%endblock%}
+
+<!-- Feed Ends -->

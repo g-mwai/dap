@@ -1,0 +1,73 @@
+{% extends '../app/base.html' %}
+
+{% block content %} 
+     
+
+{% load static %}
+
+<div class="col feed">
+
+  <div class="container secondary_post mt-5">
+
+    <h4 class="mt-4 text-center "> Post a Gig</h4>
+    
+    <form class="post_form mt-5" accept-charset="UTF-8" action="{% url 'upload_post' %}" method="POST" enctype="multipart/form-data" id="post-form">
+      {% csrf_token %}
+      <!-- {{ form.as_p }} -->
+
+
+      <div class="form-group  mt-3 topic">
+        {{ form.title }}
+    </div>
+
+
+
+      <div class="form-group mt-3">
+
+        <textarea type="text" name="body" class="form-control post-input"  placeholder="More details .." style="height: 200px;" ></textarea>
+      </div>
+
+    <div class="word-count-progress ml-2 mr-2 mt-2 ">
+      <div class="progress">
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+  </div>
+
+  <div class="form-group  mt-3 topic">
+      {{ form.location }}
+  </div>
+
+  <div class="row mt-3 ml-2">
+  <div class="form-group   topic">
+    <label>Job Type</label>
+    {{ form.gig_type }}
+</div>
+
+<div class="form-group ml-2  topic">
+  <label>Xp</label>
+  {{ form.experience }}
+</div>
+</div>
+
+
+<div class="form-group ml-2 mt-3 topic">
+  <label>Budget </label>
+    {{ form.budget }}
+</div>
+
+      
+     
+     <div class="text-center mt-3 ">
+      <button type="submit" name="submit" class="btn btn-rounded px-3 btnClick ">Publish</button>
+    </div>
+    </div>
+
+    </form>
+
+  </div>
+  {% block scripts %}
+  <script src="{% static 'js/yesno.js' %}"></script>
+
+  {%endblock%}
+  {%endblock%}

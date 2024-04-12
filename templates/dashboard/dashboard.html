@@ -1,0 +1,138 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+
+{% load static %}
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card card-stats">
+                            <a href="{% url 'members' %}">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="icon-big text-center icon-warning">
+                                            <i class="fa-solid fa-users text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="numbers">
+                                            <p class="card-category">Profiles</p>
+                                            <h4 class="card-title">{{members_c}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                            <div class="card-footer ">
+                                <hr>
+                                <div class="stats">
+                                    <i class="fa fa-refresh"></i> Update Now
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card card-stats">
+                            <a href="{% url 'posts' %}">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="icon-big text-center icon-warning">
+                                            <i class="fa-solid fa-boxes-stacked text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="numbers">
+                                            <p class="card-category">Posts</p>
+                                            <h4 class="card-title"> {{posts_c}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                            <div class="card-footer ">
+                                <hr>
+                                <div class="stats">
+                                    <i class="fa fa-calendar-o"></i> Last day
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card card-stats">
+                            <a href="{% url 'earnings' %}">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="icon-big text-center icon-warning">
+                                            <i class="fa-solid fa-sack-dollar text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="numbers">
+                                            <p class="card-category">Total Earnings</p>
+                                            <h4 class="card-title">{{total_earnings}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                            <div class="card-footer ">
+                                <hr>
+                                <div class="stats">
+                                    <i class="fa fa-clock-o"></i> In the last hour
+                                </div>
+                            </div>
+        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card card-stats">
+                            <a href="{% url 'reports' %}">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="icon-big text-center icon-warning">
+                                            <i class="fa-solid fa-circle-radiation text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="numbers">
+                                            <p class="card-category">Reports</p>
+                                            <h4 class="card-title">{{reports_c}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                            <div class="card-footer ">
+                                <hr>
+                                <div class="stats">
+                                    <i class="fa fa-refresh"></i> Update now
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class=" mx-auto ">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" id="start-date">
+                    
+                        <label for="end-date">End Date:</label>
+                        <input type="date" id="end-date">
+                    
+                        <button id="apply-filter" class="btn btn-primary"> Filter</button>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <canvas id="userCountChart" width="500" height="200"></canvas>
+
+                    </div>
+                    </div>
+
+                    </div>
+        </div>
+                              
+{% endblock %}

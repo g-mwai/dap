@@ -1,0 +1,231 @@
+{% extends '../app/base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  
+ <div class="col feed ">
+
+  <div class="app--feed ">
+    <h5  class="mt-2 text-center">{{ experience |capfirst }} Jobs</h5>
+<br>
+    {% for gig in filtered_gigs %}
+    <div class="row mt-2">
+  
+       
+        
+        <div class="post_card  mb-2 col-12 "> 
+          <div class="row">
+           <!-- <div class="ml-3 ">
+             <button class="btn btn-trans " data-toggle="tooltip" data-placement="top" title="Views" >
+              <small> <i class="fa-solid fa-chart-simple grey"></i>
+               9 </small>
+           </button>
+           </div> -->
+ 
+          
+ 
+           <div class=" ml-auto grey mt-2 ">
+             <i class="fa-solid fa-location-dot"></i>  {{ gig.location }}
+           </div>
+ 
+           
+        
+         <div class="ml-auto  mr-3 mt-2">
+            <div class="card-action">
+        <div class="dropdown">
+        <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light btn-round" data-toggle="dropdown">
+         <i class="fa-solid fa-ellipsis"></i>
+   
+        </a>
+         <div class="dropdown-menu dropdown-menu-right">
+           {% if request.user != gig.posted_by %}
+           <button class="dropdown-item follow-button px-3 mr-2 btn btn-light" data-profile-username="{{ post.posted_by }}"
+                   data-initial-state="{% if request.user.username in post.posted_by.following.all %}unfollow{% else %}follow{% endif %}">
+               {% if request.user.username in gig.posted_by.following.all %}
+                   Unfollow <span class="blue">@{{gig.posted_by.username}}</span>
+               {% else %}
+                   Follow <span class="blue">@{{gig.posted_by.username}}</span>
+               {% endif %}
+           </button>
+   
+           {% endif %}
+   
+           {% if request.user == gig.posted_by %}
+            <button class="dropdown-item" onclick="confirmDelete({{ gig.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+           {% endif %}
+   
+           {% if request.user != gig.posted_by %}
+          <button class="dropdown-item" data-toggle="modal" data-target="#ReportModal"><i class="fa-regular fa-flag red mr-2"></i> Report post</button>
+          {% endif %}
+         <!-- <button class="dropdown-item btn btn-light copy-url-button" data-url="{{ gig.get_absolute_url }}" ><i class="fa-solid fa-link mr-1"></i> Copy link</button> -->
+        
+   
+   
+          </div>
+         </div>
+       
+        </div>
+       </div>
+     </div>
+      
+   
+         <div class="post_card--brand ">
+           <div class="brand__info">
+             <!-- Post Company Name (Cumulus by default) and Sponsored or Organic post (remove Sponsored if Organic Post) -->
+   
+             <div class="name-tag ">
+   
+   
+               <a href="{% url 'view_profile' gig.posted_by%}">
+               <div class="follow-account ">
+                 <span class="account-avatar">
+                   {% if gig.avatar %}
+                  
+                   <img src="{{ gig.avatar.url }}"  id="user-main-avatar">
+                   {% else %}
+                       <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                    
+                       {% endif %}
+                 </span>
+                 <div class="user-details ">
+                   <p><b>{{gig.poster_full}} </b> {% if gig.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 19px;height: auto; margin-bottom: 3px;"></span> {% endif %}  . {{gig.whenpublished}} </p>
+                   <p class="blue">@{{gig.posted_by}}</p>
+                 </div>
+               
+             </div>
+           </a>
+   </div>
+             
+           </div>
+         </div>
+         
+        
+        <div class="container mt-2 ">
+ 
+         <div class="ml-auto mt-2 mb-3 binary_badge">
+          <a href="{% url 'type_'|add:gig.gig_type %}" class="badge badge-pill badge-primary ">{{gig.gig_type}}</a> 
+           <!-- <a href="" class="badge badge-pill badge-primary  ml-2">{{gig.experience}}</a>  -->
+ 
+         </div>
+ 
+         <b>{{ gig.title }}</b>
+ 
+         <div class="gig-body ">
+           
+           <p class="short-body mt-1" id="gig-body" >
+             {{ gig.body|slice:":144" }}{% if gig.body|length > 144 %}...{% endif %}
+           </p>
+ 
+           <p class="full-body mt-1" id="gig-body" >
+   
+             {{ gig.body }} </p>
+           {% if gig.body|length > 144 %}
+               <a class="show-more-link">Show more</a>
+           {% endif %}
+           <a class="show-less-link blue" style="display: none; ">Show less</a>
+   
+       </div>
+           
+           
+         
+        
+       <div class="post_card--summary mt-3 mb-3">
+         <a href="#">
+           <div class="post_card--cta ">
+             <div class="mx-auto mt-2 mb-2">
+               <button class="btn btn-outline-primary btn-round px-3">Apply <i class="fa-solid fa-arrow-right"></i> </button>
+           </div>
+         </div>
+         </a>
+ 
+         </div>
+        
+         </div>
+   
+         
+   
+         </div>
+         </div>
+
+    {% endfor %}
+    <div class="spacer"></div>
+    </div>
+</div>
+    
+    
+
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto">
+          <p>Post 1 </p>
+          <hr>
+          <form method="POST" class="text-center ">
+            {% csrf_token %}
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Describe your product</label><br>
+              
+              {{ sell_form.about}}
+            </div>
+          
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Display price</label><br>
+              
+              {{ sell_form.display_price}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Price limit</label><br>
+              
+              {{ sell_form.price_limit}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Product location</label><br>
+              
+              {{ sell_form.product_location}}
+            </div>
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Product condition</label><br>
+              
+              {{ sell_form.product_condition}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Pick up</label><br>
+              
+              {{ sell_form.product_pick_up}}
+            </div>
+
+            <div class="col-lg-12 text-center">
+              <label class=" col-form-label form-control-label">Payment method</label><br>
+              
+              {{ sell_form.payment_method}}
+            </div>
+
+          <br>
+          
+           <button type="submit" class="btn btn-dark px-5 ">Post</button>
+            
+         
+          
+           </form>        </div>
+      <div class="modal-footer">
+      
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Feed Ends -->
+{% endblock %}

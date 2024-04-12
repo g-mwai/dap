@@ -1,0 +1,356 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css'%}">
+    <link rel="stylesheet" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==">
+
+    <link rel="stylesheet" href="{% static 'css/app_style.css'%}">
+
+  
+    <title>app UI</title>
+
+  </head>
+  
+  <div class="sticky-top currency-bar mt-3">
+    <!-- Menu -->
+
+    <div class="btn-toolbar " role="toolbar" aria-label="Toolbar with button groups">
+        
+        <div class="btn-group  ml-auto" role="group" aria-label="Actions group">
+            <button type="button" class="btn btn-dark token-btn btn-rounded" href="javascript:void();" data-toggle="modal" data-target="#TokenModal"><img src="{% static 'img/token.png'%}" alt="" > <span ><b>10</b> </span> </button>
+     </div>
+
+    </div>
+
+</div>  
+  <body>
+    <!-- Main Body Starts -->
+
+    <div class="container">
+    
+    <div class="ml-5 mb-2">
+      <div id="logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'img/logo.png'%}" alt="">
+        </a>
+    </div>
+
+    </div>
+    
+    <div class="row">
+      <!-- Sidebar Starts -->
+      
+      <div class="col left__rail">
+        <div class="sidebar">
+               
+        <a href="{% url 'home'%}"><div class="sidebar__link">
+         
+            <span class="sidebar-icons"><img src="{% static 'img/icons/home.png'%}"/></span>
+            
+            <span class="pt-2"><h2 >Home</h2></span>
+          
+          </div>
+        </a>
+        <a href="{% url 'explore'%}"><div class="sidebar__link">
+          <span class="sidebar-icons"><img src="{% static 'img/icons/explore.png'%}"/></span>
+        <span class="pt-2"><h2>Explore</h2></span>
+        </div>
+      </a>
+          <a href="{% url 'chat_list'%}"><div class="sidebar__link">
+            <span class="sidebar-icons"><img src="{% static 'img/icons/plugins.png'%}"/></span>
+          <span class="pt-2"><h2>Plugins</h2></span>
+          </div>
+        </a>
+        
+          <a href="{% url 'notification_list'%}"><div class="sidebar__link">
+            <span class="sidebar-icons"><img src="{% static 'img/icons/notification.png'%}"/></span>
+          <span class="pt-2"><h2>Notifications</h2></span>
+          </div></a>
+          <a href="{% url 'view_profile' user.username %}"><div class="sidebar__link">
+            <span class="sidebar-icons"><img src="{% static 'img/icons/shop.png'%}"/></span>
+          <span class="pt-2"><h2>Shop</h2></span>
+          </div></a>
+          <a href="{% url 'view_profile' user.username %}"><div class="sidebar__link">
+            <span class="sidebar-icons"><img src="{% static 'img/icons/profile.png'%}"/></span>
+          <span class="pt-2"><h2>My Profile</h2></span>
+          </div></a>
+          <div class="card-action">
+            <div class="dropdown">
+            <a href="javascript:void();" class=" dropdown-toggle-nocaret" data-toggle="dropdown">
+              <div class="sidebar__link">
+
+              <span class="sidebar-icons"><img src="{% static 'img/icons/more.png'%}"/></span>
+              <span class="pt-2"><h2>More</h2></span>
+            </div>
+
+            </a>
+
+             <div class="dropdown-menu more-dropdown dropdown-menu-right">
+              <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-sliders mr-2 "></i> Dashboard</a>
+             <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-gear mr-2 "></i> Settings</a>
+             <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-circle-info mr-2 "></i> Support</a>
+             <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-arrow-right-from-bracket mr-2 "></i> Logout</a>
+
+              </div>
+             </div>
+            </div>
+
+          <div class="mx-auto  post-cta " >
+              <a href="javascript:void();" class=" dropdown-toggle-nocaret" data-toggle="dropdown">
+                <button class="btn btn-dark btn-post px-5 " ><div class="dropdown">
+
+                <span class="text-light"><b>POST</b></span>
+              </button>
+
+              </a>
+  
+               <div class="dropdown-menu post-dropdown dropdown-menu-right ">
+               <a class="dropdown-item" href="javascript:void();" data-toggle="modal" data-target="#StoryModal"><i class="fa-regular fa-paper-plane red"></i><b></b> story</a>
+               <a class="dropdown-item" href="javascript:void();" data-toggle="modal" data-target="#ThreadModal" ><i class="fa-solid fa-hashtag red"></i> thread</a>
+
+                </div>
+               </div>
+         
+         
+       
+          <div class=" mt-5 profile-link">
+            <div class="account">
+              
+
+              <div class="account-avatar">
+                <a href="{% url 'view_profile' user.username %}">
+                <img src="{% static 'img/avatar.jpg'%}" c alt=""></a>
+              </div>
+
+              <div class="user-details ml-2 text-left">
+                <a href="{% url 'view_profile' user.username %}">
+
+                <p ><b>{{my_profile.name}}</b> <br> </p>
+                <p class="blue">@{{user.username}}</p>
+                </a>
+              </div>
+              <div>
+                
+
+              </div>
+             
+            </div>
+          </a>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar Ends -->
+
+     {% block content %} 
+     
+
+     {%endblock%}
+
+  <!-- Widgets Starts -->
+
+  <div class="col right__rail">
+    
+    <div class="follow-block pt-1 pb-2">
+      <h3 class="ml-3 "><b>Filters </b></h3>
+
+      <div class="row ">
+      
+      <button class="btn btn-dark btn-rounded ml-4 mt-3">All</button>
+      
+      
+        <button class="btn btn-outline-dark btn-rounded ml-2 mt-3">Stories</button>
+
+        
+          <button class="btn btn-outline-dark btn-rounded ml-2 mt-3">Threads</button>
+          
+          
+
+            
+    </div>
+        
+     
+
+   
+      </div>
+
+
+    <div class="featured">
+      <div class="right-nav-menu mr-3">
+        <div class="card-action">
+          <div class="dropdown">
+          <a href="javascript:void();" class=" dropdown-toggle-nocaret" data-toggle="dropdown">
+           
+            <i class="fa-solid fa-ellipsis"></i>
+     
+          </a>
+           <div class="dropdown-menu dropdown-menu-right">
+           <a class="dropdown-item" href="javascript:void();"><i class="fa-solid fa-plus red"></i> Create New</a>
+            </div>
+           </div>
+          </div>      
+      </div>
+
+
+      <div class="featured__sticky pt-3">
+        <div class="trending-block  mb-4">
+          <div class="trending-title">
+            <!-- <span class="baraza ml-4 pt-3"> 
+              <img  src="{% static 'img/baraza.png'%}">
+            </span> -->
+          <span ><h3 class="ml-3 pt-3 pb-1"><b> <a href="{% url 'baraza'%}">Forums</a> </b> </h3> </span>
+          
+        </div>
+        <div class="">
+          <ul class=" forum-list ">
+          <li ><span class="red"><i class="fa-solid fa-angles-right"></i> </span>Cars  </li> 
+          <li ><span class="red"><i class="fa-solid fa-angles-right"></i> </span>Politics  </li>
+          <li ><span class="red"><i class="fa-solid fa-angles-right"></i> </span>Football  </li>
+          <li ><span class="red"><i class="fa-solid fa-angles-right"></i> </span>Music </li>
+        </ul>
+        </div>
+        <p class="ml-5"><b>see more</b></p>
+        </div>
+        <div class="follow-block ">
+          <h3 class="ml-4 "><b>Who to Follow </b></h3>
+
+            <div class="follow-account ml-3 mt-3">
+              <div class="account-avatar">
+                <img src="{% static 'img/avatar.jpg'%}" c alt="">
+              </div>
+              <div class="user-details ">
+                <p><b>John Smith</b></p>
+                <p class="blue">@johnsmith</p>
+              </div>
+              <div class="follow-btn ml-3">
+                <button class="btn btn-dark px-3">Follow</button>
+              </div>
+            </div>
+         
+            <div class="follow-account ml-3">
+              <div class="account-avatar">
+                <img src="{% static 'img/avatar.jpg'%}" c alt="">
+              </div>
+              <div class="user-details ">
+                <p><b>John Smith</b></p>
+                <p class="blue">@johnsmith</p>
+              </div>
+              <div class="follow-btn ml-3">
+                <button class="btn btn-dark px-3">Follow</button>
+              </div>
+          </div>
+          <p class="ml-5"><b>see more</b></p>
+
+       
+          </div>
+        
+      
+
+        </div>
+
+
+        <div class="footer">
+          Terms of Service - Privacy Policy - Cookie Policy - Accessibility - @ 2022 Soconey
+        </div>
+      </div>
+    </div> 
+   
+    
+    <!-- Widgets Ends -->
+  </div>
+
+ 
+  </div>
+
+  
+  </div>
+
+  <div class="fixed-bottom-menu ">
+    <div class="fixed-bottom-menuــrow row ">
+      <a href="{% url 'home'%}" title="" class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/home.png'%}"/>
+        </span>
+        <h6 class="mt-1">Home</h6>
+      </a>
+    
+      <a href="{% url 'chat_list'%}" title="" class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/chats.png'%}"/>
+        </span>
+        <h6 class="mt-1">Chats</h6>
+      </a>
+      <a href="{% url 'free_store'%}" title="" class="fixed-bottom-menu__a">
+        <span class="main-cta">
+          <img src="{% static 'img/post.png'%}"/>
+        </span>
+        <h6 class="mt-1">POST</h6>
+      </a>
+      <a href="{% url 'notification_list'%}" title="" class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/notification.png'%}"/>
+        </span>
+        <h6 class="mt-1">Alerts</h6>
+      </a>
+      
+      <a href="#" title="" class="fixed-bottom-menu__a">
+        <span class="">
+          <img src="{% static 'img/icons/more.png'%}"/>
+        </span>
+        <h6 class="mt-1">More</h6>
+      </a>
+    </div>
+</div>
+
+
+
+  <!-- Main Body Ends -->
+  </body>
+  {% block scripts %}
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    // AJAX CALL
+    $('.likin').click(function(){
+        $.ajax({
+                 type: "POST",
+                 url: "{% url 'like_button' %}",
+                 data: {'post_id': $(this).attr('name'),'operation':'like_submit','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                 dataType: "json",
+                 success: function(response) {
+                  selector = document.getElementsByName(response.post_id);
+                        if(response.liked==true){
+                          $(selector).css("color","red");
+                        }
+                        else if(response.liked==false){
+                          $(selector).css("color","grey");
+                        }
+    
+    
+                  }
+    
+            });
+    
+      })
+    </script>
+
+  <script src="{% static 'js/vendor/jquery-1.12.4.min.js'%}"></script>
+  <script src="{% static 'js/popper.min.js'%}"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/app_scripts.js'%}"></script>
+
+{%endblock%}
+  
+</html>

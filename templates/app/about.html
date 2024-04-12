@@ -1,0 +1,238 @@
+{% extends './base.html' %}
+{% block content %}
+
+{% load static %}
+
+ <!-- Feed Starts -->
+
+ 
+ 
+  <div class="col">
+    <div class="container">
+
+    <ul class="tabs-bar  pt-2 text-center">
+      <li id="tab1" class="tab tab-active"><b>For You</b></li>
+      <li id="tab2" class="tab"> <b>Following</b></li>
+  
+    </ul>
+ 
+
+ 
+    <div class="  feed">
+      <div class="app--feed">
+
+  <div class="content-container ">
+    <div class="content content-tab1 content-active pt-5 ">
+
+      <p>
+        Soconey is a marketplace that is built to enable the exchange of ideas, services, digital products and physical products 
+      </p>
+
+  <!-- END FEED-->
+</div>
+
+    </div>
+    <div class="content content-tab2">
+
+      <div class="app--feed">
+
+    
+
+</div>
+
+    </div>
+    
+  </div>
+</div>
+    
+    
+
+</div>
+</div>
+
+<div class="modal fade" id="ThreadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto">
+          <p>Post 1 </p>
+          <hr>
+          <div class="container">
+
+             
+          
+            <div class="form-content-container ">
+              <div class="form-content form-content-tab1 form-content-active">
+                <form method="POST" class="text-center ">
+                  {% csrf_token %}
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">Describe your post</label><br>
+                    
+                    {{ sell_form.about}}
+                  </div>
+              
+      
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">post location</label><br>
+                    
+                    {{ sell_form.post_location}}
+                  </div>
+
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">Display price</label><br>
+                    
+                    {{ sell_form.sale_price}}
+                  </div>
+
+                 
+
+      
+                
+                  <div class="row">
+                  <div class="col-lg-6 ">
+                    <label class=" col-form-label form-control-label">Exchange Method</label><br>
+                    
+                    {{ sell_form.product_pick_up}}
+                  </div>
+      
+                  <div class="col-lg-6 ">
+                    <label class=" col-form-label form-control-label">Payment method</label><br>
+                    
+                    {{ sell_form.payment_method}}
+                  </div>
+                </div>
+      
+                <br>
+                
+                 <button type="submit" class="btn btn-dark px-5 ">Post</button>
+                  
+               
+                
+                 </form> 
+                </div>
+                
+                 </div>
+                </div>
+      <div class="modal-footer">
+      
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="StoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body mx-auto">
+          <p>Post 1 </p>
+          <hr>
+          <div class="container">
+
+             
+          
+            <div class="form-content-container ">
+              <div class="form-content form-content-tab1 form-content-active">
+                <form method="POST" class="text-center ">
+                  {% csrf_token %}
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">Describe your post</label><br>
+                    
+                    {{ sell_form.about}}
+                  </div>
+              
+      
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">post location</label><br>
+                    
+                    {{ sell_form.post_location}}
+                  </div>
+
+                  <div class="col-lg-12 text-center">
+                    <label class=" col-form-label form-control-label">Display price</label><br>
+                    
+                    {{ sell_form.sale_price}}
+                  </div>
+
+                 
+
+      
+                
+                  <div class="row">
+                  <div class="col-lg-6 ">
+                    <label class=" col-form-label form-control-label">Exchange Method</label><br>
+                    
+                    {{ sell_form.product_pick_up}}
+                  </div>
+      
+                  <div class="col-lg-6 ">
+                    <label class=" col-form-label form-control-label">Payment method</label><br>
+                    
+                    {{ sell_form.payment_method}}
+                  </div>
+                </div>
+      
+                <br>
+                
+                 <button type="submit" class="btn btn-dark px-5 ">Post</button>
+                  
+               
+                
+                 </form> 
+                </div>
+                
+                 </div>
+                </div>
+      <div class="modal-footer">
+      
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="TokenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" id="token-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body ">
+        <div class="text-center">
+          <img src="{% static 'img/token-big.png'%}"/>
+        </div>
+          <div class="container text-center ">
+            
+            <p>You have 10 tokens</p>
+            <p>Use tokens to create posts and to tip creators</p>
+            <br>
+                </div>
+      <div class="modal-footer">
+      
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<!-- Feed Ends -->
+{% endblock %}

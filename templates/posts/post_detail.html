@@ -1,0 +1,638 @@
+{% extends '../app/base.html' %}
+
+{% block content %} 
+     
+
+{% load static %}
+
+ <!-- Feed Starts -->
+  
+ <div class="col">
+  
+  <div class="row detail-bar">
+    <div class="mt-3">
+     <h5><a href="{% url 'home' %}"><i class="fa fa-arrow-left mr-2"></i> Feed </a> </h5>
+    </div>
+  </div>
+
+
+  <div class=" feed details__feed">
+  
+ 
+
+      <div class="app--feed mt-5">
+
+
+        <div class="detail__content ">
+
+         
+
+          <div class="row mt-5">
+            
+            <div class=" col-12 post_card">
+        
+              <div class="mt-4 ">
+                <div class="row mr-auto blue ml-3"><small>Posted on {{ post_detail.timestamp|date:"d, M - Y" }}
+                </small> 
+                 </div>  
+
+                 <div class="row">
+       
+                  <div class="ml-auto mr-4 mb-2">
+                    {% if request.user != post_detail.posted_by %}
+
+                     <div class="card-action">
+                 <div class="dropdown">
+                 <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light btn-round" data-toggle="dropdown">
+                  <i class="fa-solid fa-ellipsis"></i>
+            
+                 </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    
+            
+                    <!-- {% if request.user == post_detail.posted_by %}
+                     <button class="dropdown-item" onclick="confirmDelete({{ post_detail.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+                    {% endif %} -->
+            
+                    <button class="dropdown-item report-button" data-toggle="modal" data-report-id="{{ post_detail.id }}" data-target="#ReportModal"><i class="fa-solid fa-shield-halved red mr-1"></i> Report  </button>
+                    
+            
+                   </div>
+                  </div>
+                
+                 </div>
+                 {% endif %}
+                </div>
+              </div>
+
+                 </div>
+                 <div class="follow-card  mt-4">
+                  <div class="row">
+                  <a href="{% url 'view_profile' post_detail.posted_by.username %}">
+    
+                  <div class="account-avatar">
+                    {% if post_detail.avatar %}
+                    <img src="{{ post_detail.avatar.url }}"  id="user-main-avatar">
+                    {% else %}
+                        <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                    {% endif %}
+                  </div>
+                </a>
+                <a href="{% url 'view_profile' post_detail.posted_by.username %}">
+                  <div class="user-details ml-2">
+                    <p><b>{{post_detail.poster_full}}</b>  <span class="blue"><small> @{{post_detail.profile.username |slice:":10" }} </small>  </span> <br>
+                    <small class="">{{ post_detail.profile.followers.count }} Followers</small></p>
+                  </div>
+                  </a>
+
+                  <div class="ml-3">
+              {% if request.user != post_detail.posted_by %}
+              {% if user.is_authenticated %}
+              <button class=" follow-button btn btn-sm px-3 btn-dark btn-round" data-profile-username="{{ post_detail.posted_by.username }}">
+                  {% if request.user in post.posted_by.followers.all %}
+                      Unfollow 
+                  {% else %}
+                      Follow 
+                  {% endif %}
+              </button>
+          {% endif %}
+    
+            {% endif %}
+                  </div>
+              </div>
+
+                  
+              </div>
+
+              
+              <div class="row ml-auto">
+                {% if post_detail.post_type == "project" %}
+          
+                  <div class=" binary_badge ">
+                          
+                  <a href="#" class="badge badge-pill badge-primary ">{{post_detail.progress}}</a> 
+                          
+                  </div>
+                  
+              <div class=" topic_badge mr-2">
+                  <a href="{% url 'industry_filter' post_detail.industry %}" class="badge badge-pill badge-warning  mr-2">{{ post_detail.industry|title }}</a>
+              </div>
+          {% endif %}
+          </div>
+
+          <div class="mt-1 ml-3 mr-3"><b>{{post_detail.headline | capfirst}} </b></div>
+
+          <div class="mt-1 ml-3 mr-3"><p>{{post_detail.body}} </p></div>
+
+  
+         
+            
+            
+          {% if post_detail.post_image %}
+          <div class="post_card--creative mt-2">
+
+
+           <img src="{{ post_detail.post_image.url }}">
+ 
+  
+          </div>
+
+          {% endif %}
+          
+
+       
+          
+          <div class="post_card--summary mb-2">
+           
+            {% if post_detail.post_type == "sell" %}
+
+            <a href="#">
+              <div class="post_card--cta ">
+                <div class="mx-auto mt-2 mb-2">
+                  <a href="{{ post_detail.cta_link }}" target="_blank" class="btn btn-outline-danger btn-round px-3">{{post_detail.cta}} <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+      
+              </div>
+            </div>
+            </a>
+            {% elif post_detail.post_type == "project" %}
+      
+            <a href="#">
+              <div class="post_card--cta ">
+                <div class="mx-auto mt-2 mb-2">
+                  <a href="{{ post_detail.cta_link }}" target="_blank" class="btn btn-outline-danger btn-round px-3">{{post_detail.project_cta}} <i class="fa-solid fa-chevron-right ml-"></i> </a>
+                      
+                </div>
+              </div>
+            </a>
+      
+            {% endif %}   
+            
+          <div class="post_card--input--left mt-2 ">
+
+            <div class="post-icons">
+              <button class="comment-button btn btn-light btn-round" data-post-id="{{ post.id }}">
+                <i class="fa-regular fa-comment"></i>
+                <span class="post-engagement ml-2">{{ post_detail.comment_count }}</span>
+  
+              </button>
+            </div>
+
+          <div class="post-icons row  ">
+              {% if user.is_authenticated %}
+  
+              <form action="{% url 'upvote_post' post_detail.id %}" method="post">
+                {% csrf_token %}
+              <span class="post-icons "> 
+                  <button  class="btn btn-light btn-round upvote-button {% if user in post.likes.all or post_detail.id in clicked_buttons %} clicked-button{% endif %}" data-post-id="{{ post_detail.id }}"> <i class="fa-regular fa-heart"></i> </button>         
+              </span>
+              </form>
+              <span class="ml-2 mr-2 mt-2" id="vote-count-{{ post_detail.id }}" > {{ post_detail.vote_count }} </span>
+
+              <form action="{% url 'downvote_post' post_detail.id %}" method="post">
+                {% csrf_token %}
+              <span class="post-icons ">
+                <button  class="btn btn-light btn-round downvote-button {% if user in post.dislikes.all %} clicked-button{% endif %}" data-post-id="{{ post_detail.id }}"> <i class="fa-solid fa-xmark"></i> </button>
+              </span>
+              </form>
+
+              {% endif %}
+          </div>
+
+
+
+
+       <div class="post-icons ">
+        <button class="bookmark-button btn btn-light btn-round" data-post-id="{{ post_detail.id }}">
+          <i class="fa-regular fa-bookmark"></i> 
+
+      </button>
+
+      </div>
+
+      
+<div class="post-icons  ">
+  <button class="repost-button btn btn-light btn-round share-btn" data-post-url="{% url 'post_detail' post_detail.identifier %}"   data-toggle="tooltip" data-placement="top" title="Share this Post" >
+    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+    </button>
+          </div>
+        
+   
+        <!-- DO NOT CHANGE THIS IMAGE -->
+      </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        
+
+
+        </div>
+
+
+        <div class="mb-2 mt-3">
+          <form class="detail-comment-form" data-post-id="{{ post_detail.id }}">
+            {% csrf_token %}
+    
+            <div class="row " id="comment_form">
+              <div class="col-12">
+            <textarea name="comment" placeholder="Post Your Comment" class="comment-input"></textarea>
+          </div>
+  
+            </div>
+            <div class="progress mt-2  ml-3 mr-3">
+              <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+          <div class="col-12  ">
+                <div class="row">
+                
+                <div class="form-group">
+                <input type="file" id="id_comment_image" name="{{ form.image.name }}" class="file-input">
+        
+            </div>                       
+              </div>
+        
+              <div class="comment-thumbnail-container">
+                <button class=" btn btn-light  clear-comment-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                <img id="comment_thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px;">
+        
+            </div>
+        
+              </div>
+              <div id="uploaded_files"></div>
+             <div class="alert alert-danger resmessage" style="display:none;"></div>
+             
+                <div class="row mb-2">
+                  
+                  <div class="mr-auto  ml-3">
+                    <label for="id_comment_image" class="file-label">
+                      <span class="icon">
+                        <img src="{% static 'img/icons/image.png'%}" alt="">
+                      </span> 
+                  </label>
+                  </div>
+        
+                  <div class="ml-auto">
+                    <div class=" mr-3 mt-2">
+                      <button type="submit" class="btn submit-comment-button btn-warning btn-round px-3 btnClick">Send</button>
+                      </div>
+                  </div>
+                
+                  </div>
+          </form>
+          </div>
+        
+    <div class="comment ml-2 ">
+ 
+      <div class="comment__counter text-center mt-3">
+        <p>{{ post_detail.comment_count }} Comments</p>
+      </div>
+
+      {% for comment in post_comments %}
+      <div class="post_card comment-card mt-3 ">
+          <div class=" row">
+            <a href="{% url 'view_profile' comment.comment_by.username %}">
+
+            <div class="lefter mr-auto">
+              
+              <span class="account-avatar ">
+              {% if comment.avatar %}
+              <img src="{{ comment.avatar.url }}"  id="user-main-avatar" >
+              {% else %}
+                  <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar" >
+              {% endif %}
+            </span>
+              <span class="  ml-2 ">
+                <b>{{comment.name}}</b> {% if comment.is_verified %}  <span><img src="{% static 'img/icons/verified.png'%}"  style="width: 18px;height: auto; margin-bottom: 3px;"></span> {% endif %}  <span class="blue"><small> @{{comment.comment_by.username |slice:":10" }} </small>  </span>                  
+                 <span class=" ml-4 comment-time"> {{comment.whenpublished}}</span> 
+
+              </span>
+            </div>
+            </a>
+              <div class="ml-auto mr-3 ">
+
+                <div class="card-action">
+                  <div class="dropdown">
+                  <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light btn-round" data-toggle="dropdown">
+                   <i class="fa-solid fa-ellipsis"></i>
+             
+                  </a>
+                   <div class="dropdown-menu dropdown-menu-right">
+                    {% if request.user != comment.comment_by %}
+                    <button class="dropdown-item follow-button btn btn-light btn-round" data-profile-username="{{ comment.comment_by }}"
+                            data-initial-state="{% if request.user.username in comment.comment_by.following.all %}unfollow{% else %}follow{% endif %}">
+                        {% if request.user.username in comment.comment_by.following.all %}
+                            Unfollow
+                        {% else %}
+                        <i class="fa-solid fa-plus mr-1"></i>  Follow 
+                        {% endif %}
+                    </button>
+            
+                    {% endif %}
+            
+                    {% if request.user == comment.comment_by %}
+                     <button class="dropdown-item" onclick="commentDelete({{ comment.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+                    {% endif %}
+            
+                    {% if request.user != comment.comment_by %}
+                    <button class="dropdown-item report-comment-button" data-toggle="modal" data-report-id="{{ comment.id }}" data-target="#ReportCommentModal"><i class="fa-solid fa-shield-halved red mr-1"></i> Report  </button>
+                    {% endif %}
+             
+                    </div>
+                   </div>
+                 
+                  </div>
+              </div> 
+          </div> 
+
+          
+        <div class="row   mt-3  ml-2">
+          <p>{{comment.body}} </p>
+        </div>
+        {% if comment.comment_image %}
+             
+          <div class="post_card--creative mt-3">
+
+           <img src="{{ comment.comment_image.url }}">
+ 
+  
+          </div>
+
+          {% endif %}
+        <div class="post_card--input--left mt-2 ">
+
+          <div class="post-icons">
+            <button class="reply-button btn btn-light btn-round" data-comment-id="{{ comment.id }}">
+              <i class="fa-regular fa-comment"></i>
+              <span class="post-engagement ml-2">{{ comment.reply_count }}</span>
+
+            </button>
+          </div>
+
+            <div class=" like row ">
+              {% if user.is_authenticated %}
+              
+              <form action="{% url 'upvote_comment' comment.id %}" method="post">
+                {% csrf_token %}
+              <span class=" ml-2"> 
+                  <button  class="btn btn-light btn-round comment-upvote-button {% if user in comment.likes.all or comment.id in clicked_buttons %} clicked-button{% endif %}" data-comment-id="{{ comment.id }}"> <i class="fa-regular fa-heart"></i> </button>         
+              </span>
+              </form>
+            
+            <span class="ml-2 mt-2" id="vote-count-{{ comment.id }}" > {{ comment.vote_count }} </span>
+    
+            <form action="{% url 'downvote_comment' comment.id %}" method="post">
+              {% csrf_token %}
+            <span class=" ml-2">
+              <button  class="btn btn-light btn-round comment-downvote-button {% if user in comment.dislikes.all %} clicked-button{% endif %}" data-comment-id="{{ comment.id }}"> <i class="fa-solid fa-xmark"></i> </button>
+            </span>
+            </form>
+            {% endif %}
+            </div>
+
+
+            <div class="post-icons mr-3">
+              <button class="comment-bookmark-button btn btn-light btn-round" data-comment-id="{{ comment.id }}">
+                <i class="fa-regular fa-bookmark"></i> 
+      
+            </button>
+      
+            </div>
+
+
+      </div>
+
+      
+      </div>
+
+      <div class="mb-2 mt-3">
+        <form class="reply-form"  data-comment-id="{{ comment.id }}" style="display: none;" >
+          {% csrf_token %}
+  
+          <div class="row " id="reply_form">
+            <div class="col-12">
+          <textarea name="reply" placeholder="Post Your Reply" class="reply-input"></textarea>
+        </div>
+       
+          </div>
+          <div class="progress ml-3 mr-3 mt-2 mb-2">
+            <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+          <div class="row">
+            <div class="ml-auto">
+              <div class=" mr-4 mt-2">
+                <button type="submit" class="btn btn-warning btn-round px-3">Send</button>
+                </div><br/>
+            </div>
+          </div>
+        </form>
+        </div>
+
+        {% if comment.replies.count > 0 %}
+        <div class="text-center">
+        <a class="toggle-replies-link blue " href="#" data-target="replies-{{ comment.id }}">
+          Show Replies
+        </a>
+        </div>
+        <div class="replies ml-3" id="replies-{{ comment.id }}" style="display: none;">
+          <!-- Loop through replies for this comment -->
+          {% for reply in comment.replies.all %}
+
+        <div class="reply reply-card mt-5 mr-1">
+          <div class=" row">
+            <a href="{% url 'view_profile' reply.reply_by.username %}">
+
+            <div class="mr-auto lefter">
+              <span class="account-avatar">
+              {% if reply.avatar %}
+              <img src="{{ reply.avatar.url }}"  id="user-main-avatar" >
+              {% else %}
+                  <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar" >
+              {% endif %}
+            </span>
+              <span class=" ml-2">
+                <b>{{reply.le_profile.name}}</b> {% if reply.is_verified %}  <span> <img src="{% static 'img/icons/verified.png'%}"  style="width: 18px;height: auto; margin-bottom: 3px;"></span> {% endif %}   <span class="blue"><small> @{{reply.le_profile.username |slice:":10" }} </small>  </span>               
+                <span class=" ml-4"> {{reply.whenpublished}}</span> 
+
+              </span>
+
+
+            </div>
+            </a>
+        
+            <div class="ml-auto mr-3">
+
+              <div class="card-action">
+                <div class="dropdown">
+                <a href="javascript:void();" class="dropdown-toggle-nocaret btn btn-light btn-round" data-toggle="dropdown">
+                 <i class="fa-solid fa-ellipsis"></i>
+           
+                </a>
+                 <div class="dropdown-menu dropdown-menu-right">
+                  {% if request.user != reply.reply_by %}
+                  <button class="dropdown-item follow-button px-3 mr-2 btn btn-light btn-round" data-profile-username="{{ reply.reply_by }}"
+                          data-initial-state="{% if request.user.username in reply.reply_by.following.all %}unfollow{% else %}follow{% endif %}">
+                      {% if request.user.username in reply.reply_by.following.all %}
+                          Unfollow 
+                      {% else %}
+                          Follow 
+                      {% endif %}
+                  </button>
+          
+                  {% endif %}
+          
+                  {% if request.user == reply.reply_by %}
+                   <button class="dropdown-item" onclick="replyDelete({{ reply.id }})"><i class="fa-solid fa-trash-can red mr-2"></i> Delete</button>
+                  {% endif %}
+          
+                  {% if request.user != reply.reply_by %}
+                  <!-- <button class="dropdown-item" data-toggle="modal" data-target="#ReportModal">Report <i class="fa-solid fa-flag red ml-1"></i></button> -->
+                  {% endif %}
+           
+                  </div>
+                 </div>
+               
+                </div>
+
+            </div>
+
+          </div> 
+
+          
+
+        <div class="row ml-2 mt-3  ">
+          <p>{{reply.body}} </p>
+        </div>
+        
+        <div class="post_card--input--left mt-2 ">
+
+          <div class="post-icons">
+
+          </div>
+
+            <div class=" like row ">
+              {% if user.is_authenticated %}
+              
+              <form action="{% url 'upvote_reply' reply.id %}" method="post">
+                {% csrf_token %}
+                <span class="ml-2"> 
+                    <button class="btn btn-light btn-round reply-upvote-button{% if user in reply.likes.all or reply.id in clicked_buttons %} clicked-button{% endif %}" data-reply-post-id="{{ reply.id }}" data-toggle="tooltip" data-placement="top" title="Like"> <i class="fa-regular fa-heart"></i> </button>
+                </span>
+            </form>
+            
+              <span class="ml-2 mt-2 mr-2" id="reply-vote-count-{{ reply.id }}" > {{ reply.vote_count }} </span>    
+            
+              <form action="{% url 'downvote_reply' reply.id %}" method="post">
+                {% csrf_token %}
+                <span class="ml-2">
+                    <button class="btn btn-light btn-round reply-downvote-button{% if user in reply.dislikes.all %} clicked-button{% endif %}" data-reply-post-id="{{ reply.id }}" data-toggle="tooltip" data-placement="top" title="Dislike"> <i class="fa-solid fa-xmark"></i> </button>
+                </span>
+            </form>
+            {% endif %}
+            </div>
+
+
+           <div class="post-icons  mr-3">
+
+       </div>
+
+
+      </div>
+
+      
+      </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  <!-- END FEED-->
+
+
+    
+  </div>
+    
+  
+    
+
+</div>
+<br/>
+
+
+</div>
+
+<!-- <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content" id="token-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body ml-2 mb-2">
+       <p> This action is not reversible. Your post will be deleted permanently from Soconey. Do you wish to proceed?</p>
+       <div class="row ">
+        <div class="mx-auto">
+          <button class="btn btn-danger" id="deleteConfirmButton">Delete</button>
+          <button class="btn btn-outline-dark ml-1" data-dismiss="modal">Cancel</button>
+      </div>
+       </div>
+              
+
+    </div>
+
+    <div class="modal-footer">
+      
+    </div>
+  </div>
+</div>
+</div>  -->
+
+<!-- Success Message Modal -->
+<div class="modal fade" id="postDeletedModal" tabindex="-1" role="dialog" aria-labelledby="postDeletedModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content delete">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+             <p class="text-center"> The post has been successfully deleted. </p>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content comment-message mb-2">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p id="messageText" class="text-center">This is a message.</p>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+
+
+<!-- Share Modal -->
+
+
+
+
+
+
+{%endblock%}
+
+<!-- Feed Ends -->

@@ -1,0 +1,112 @@
+{% extends '../app/profile_base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="col">
+    <div class="container">
+        <ul class="tabs-bar text-center">
+          <li id="tab1" class="tab tab-active"><b>Followers</b></li>
+          <li id="tab2" class="tab"> <b>Following</b></li>
+      
+        </ul>
+        <div class=" feed">
+        <div class="app--feed mt-5 ">
+        <div class="content-container ">
+            <div class="content content-tab1 content-active">
+              
+      {% if followers %}
+     {% for follower in followers %}
+     {% if request.user != follower.user %}
+
+     
+    <a href="{% url 'view_profile' follower.user.username %}">
+    <div class="follow-account ml-3">
+        <div class="account-avatar">
+          {% if follower.avatar %}
+          <img src="{{ follower.avatar.url }}"  id="user-main-avatar">
+          {% else %}
+              <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+          {% endif %}       
+         </div>
+        <div class="user-details ">
+          <p><b>{{follower.name}}</b></p>
+          <p class="blue">@{{follower.user.username}}</p>
+        </div>
+        
+        <div class="follow-btn ml-auto mr-3">
+          {% if request.user != profile_user %}
+          <button class="dropdown-item follow-button  bg-dark text-light btn-round px-3" data-profile-username="{{ follower.username }}">
+        {% if follows %}
+          Unfollow 
+        {% else %}
+          Follow 
+        {% endif %} 
+        </button>
+        {% endif %}          
+        </div>
+      </div>
+    </a>
+    {%endif%}
+
+    {%endfor%}
+    
+    {% else %}
+    <div class="empty-img text-center"> <img src="{% static 'img/icons/empty.svg' %}" ></div>
+
+    {% if request.user == profile.user %}
+    <p class="mt-3 text-center"> You dont have any followers yet </p>
+     {% else %}
+     <p class="mt-3 text-center"> @ {{profile.user}} doesnt have any followers yet </p>
+     {%endif%}
+    {% endif %}
+    </div>
+    </div>
+
+    <div class="content-container ">
+        <div class="content content-tab2 ">
+          {% if following %}
+            {% for follower in following %}
+            {% if request.user != follower.user %}
+            <a href="{% url 'view_profile' follower.user.username %}">
+            <div class="follow-account ml-3">
+                <div class="account-avatar">
+                  {% if follower.avatar %}
+                  <img src="{{ follower.avatar.url }}"  id="user-main-avatar">
+                  {% else %}
+                      <img src="{% static 'img/default_avatar.jpg' %}" alt="Default Avatar" id="user-main-avatar">
+                  {% endif %}                </div>
+                <div class="user-details ">
+                  <p><b>{{follower.name}}</b></p>
+                  <p class="blue">@{{follower.user.username}}</p>
+                </div>
+
+                <div class="follow-btn ml-auto mr-3">
+                  <button class="dropdown-item follow-button  bg-secondary text-light btn-round px-3" data-profile-username="{{ follower.username }}">
+                  Unfollow 
+                </button>
+                         
+                </div>
+                
+              </div>
+            </a>
+            {% endif %} 
+        
+            {%endfor%}
+            {% else %}
+            <div class="empty-img text-center"> <img src="{% static 'img/icons/empty.svg' %}" ></div>
+
+    {% if request.user == profile.user %}
+    <p class="mt-3 text-center"> You have no following yet  </p>
+     {% else %}
+     <p class="mt-3 text-center"> @{{profile.user}} has not followed anyone yet </p>
+     {%endif%}
+     {%endif%}
+    </div>
+    </div>
+    </div>
+    </div>
+
+</div>
+
+</div>
+{%endblock%}

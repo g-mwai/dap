@@ -1,0 +1,53 @@
+{% extends './base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+
+{% load static %}
+<main class="container mb-2">
+    <div class="row">
+     
+
+<div class="col-lg-6 col-sm-12  form-img">
+  <div class="hero container">
+    <h3 class=" ">Join our community</h3>
+    <p class="hero-title-sub "><b>We are a fun, community powered platform that is building the future of social commerce. 
+    Become a member today and win 500 Soconey Coins!</b> </p>
+    
+
+    <a href="#" class="btn btn-dark btn-round px-3 " data-toggle="modal" data-target="#SignupModal">Get Started <i class="fa-solid fa-play ml-1"></i></a>
+
+  </div>
+  </div>
+
+  <div class="col-lg-6 col-sm-12 ">
+    <div class="hero-image">
+      <div class=" mx-auto "><br>
+        
+        <p class="text-dark text-center text-uppercase"><b>Login </b></p>
+        <hr>
+        <form method="POST" class="text-center" action="{% url 'landing' %}">
+            
+            
+          {% csrf_token %}
+          {{ login_form|crispy }}
+  
+          
+           <button type="submit" class="btn btn-danger btn-block waves-effect waves-light ">Log In</button>
+            <hr>
+            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-block waves-effect waves-light  mt-2"><img src="{% static 'img/google-i.png' %}" class="google_icon  mr-1"> Continue with Google </a>  
+
+         
+          
+           </form><br>
+        <div id="signupErrors" class="text-danger text-center"></div> <!-- Error messages will be displayed here -->
+    </div> 
+  </div>
+  </div>
+</div>
+
+</main>
+
+
+
+{%endblock%}

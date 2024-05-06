@@ -12,10 +12,10 @@
 
   <div class="container">
   <ul class="tabs-bar ">
-    <li id="tab1" class="tab tab-active"><b>Threads</b></li>
+    <li id="tab1" class="tab "><b>Threads</b></li>
     <li id="tab2" class="tab"> <b>Jobs</b></li>
     <li id="tab3" class="tab"> <b>Deals</b></li>
-    <li id="tab4" class="tab"> <b>Projects</b></li>
+    <li id="tab4" class="tab tab-active"> <b>Shop</b></li>
 
 
   </ul>
@@ -24,9 +24,9 @@
   <div class="feed">
 
   <div class="app--feed">
-<p class="orange text-center">Search results</p>
+<p class="orange text-center">Results for " {{query|slice:":10" }}..."</p>
   <div class="content-container">
-    <div class="content content-tab1 content-active">
+    <div class="content content-tab1 ">
       {% if threads %}
 
       {% for post in posts_results %}
@@ -652,12 +652,12 @@
       </div>
 
       <div class="content-container">
-        <div class="content content-tab4 ">
+        <div class="content content-tab4 content-active">
     
-          {% if projects %}
+          {% if products %}
     
           {% for post in posts_results %}
-          {% if post.post_type == "project" %}
+          {% if post.post_type == "product" %}
           <div class="row mt-2">
 
      
@@ -671,11 +671,11 @@
                </button>
                </div>
           
-               <div class="ml-auto mt-1 binary_badge">
+               <!-- <div class="ml-auto mt-1 binary_badge">
           
                 <a href="#" class="badge badge-pill badge-primary ">{{post.progress}}</a> 
           
-              </div>
+              </div> -->
               
             
              <div class="ml-auto  mr-3 mt-1">
@@ -791,10 +791,10 @@
            <div class="post_card--summary">
              <a href="#">
                <div class="post_card--cta ">
-                 <div class="mx-auto mt-2 mb-2">
-                   <a href="{{ post.cta_link }}" target="_blank" class="btn btn-outline-danger btn-round px-3">{{post.project_cta}} <i class="fa-solid fa-chevron-right ml-"></i> </a>
-          
-               </div>
+                <div class="mx-auto mt-2 mb-2">
+                  <a href="{% url 'post_detail' post.identifier %}"  class="btn btn-outline-light text-danger px-3">Ksh {{post.min_price}} - {{post.max_price}} </a>
+      
+              </div>
              </div>
              </a>
                <!-- DO NOT CHANGE THIS IMAGE -->

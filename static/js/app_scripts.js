@@ -38,10 +38,6 @@ $(".profile-tab").click(function(){
   $(".profile-content-" + this.id).show();
 })
 
-
-
-
-
 $('.file-input').on('change', function() {
     var fileName = $(this).val().split('\\').pop();
     $(this).next('.file-label').html('<span class="icon">📷</span> ' + fileName);
@@ -210,6 +206,45 @@ commentTextareas.on('input', function () {
 // Initialize textarea heights
 commentTextareas.each(function () {
   adjustTextareaHeight(this);
+});
+
+
+// Select all comment textareas
+var DcommentTextareas = $('.detail-comment-form textarea');
+
+// Function to adjust textarea height
+function adjustDTextareaHeight(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+// Attach input event listener to all comment textareas
+DcommentTextareas.on('input', function () {
+  adjustDTextareaHeight(this);
+});
+
+// Initialize textarea heights
+DcommentTextareas.each(function () {
+  adjustDTextareaHeight(this);
+});
+
+// Select all comment textareas
+var RcommentTextareas = $('.reply-form textarea');
+
+// Function to adjust textarea height
+function adjustRTextareaHeight(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+// Attach input event listener to all comment textareas
+RcommentTextareas.on('input', function () {
+  adjustRTextareaHeight(this);
+});
+
+// Initialize textarea heights
+RcommentTextareas.each(function () {
+  adjustRTextareaHeight(this);
 });
 
 // Select all comment textareas

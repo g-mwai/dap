@@ -230,6 +230,16 @@
 
         </div>
 
+        {% if post_detail.post_type == "product" %}
+      
+        <p class=" text-center mt-3">
+          <a class="btn btn-outline-danger btn-round px-3 ">Buy Now </a>
+          <a class="btn btn-primary px-3 btn-round ml-2">Cart <i class="fa-solid fa-plus"></i></a>
+  
+        
+        </p>
+  
+        {% endif %} 
 
         <div class="mb-2 mt-3">
           <form class="detail-comment-form" data-post-id="{{ post_detail.id }}">

@@ -92,6 +92,36 @@ class NewCommentForm(ModelForm):
         fields = ('body', )
 
 
+class TagForm(forms.ModelForm):
+    category= forms.ChoiceField(choices=Categories.choices, label="Category")
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'profile-edit', 'placeholder': 'name'}),
+        label=False
+    )
+    class Meta:
+        model = Tag
+        fields = ('name','category' )
+        
+class ProductForm(forms.ModelForm):
+    category= forms.ChoiceField(choices=Categories.choices, label="Category")
+
+    headline = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'profile-edit', 'placeholder': 'Headline'}),
+        label=False
+    )
+    size = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'profile-edit', 'placeholder': 'Size'}),
+        label=False
+    )
+    body = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'post-input', 'placeholder': 'Product Description'}),
+        label=False
+    )
+    class Meta:
+        model = Post
+        fields = ['headline', 'category', 'body', 'max_price', 'size', ]
+
+
 class NewReplyForm(ModelForm):
     class Meta:
         model = Reply
@@ -111,6 +141,12 @@ class NewArticleForm(ModelForm):
     class Meta:
         model = Post
         fields = ('industry','body', 'headline', 'tags' )
+
+class PostImageForm(ModelForm):
+
+    class Meta:
+        model = ProductImage
+        fields = ('image', )
 
 
 

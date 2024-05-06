@@ -59,6 +59,13 @@
                         <p>Documents</p>
                     </a>
                 </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url 'landing' %}">
+                        <i class="fa-solid fa-shop"></i>
+                        <p>shop</p>
+                    </a>
+                </li>
                 
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#formsExamples">
@@ -131,18 +138,18 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#mapsExamples">
-                        <i class="fa-solid fa-sack-dollar"></i>
+                        <i class="fa-solid fa-store"></i>
                         <p>
-                            Business
+                            Shop
                             <b class="caret"></b>
                         </p>
                     </a>
                     <div class="collapse " id="mapsExamples">
                         <ul class="nav">
                             <li class="nav-item ">
-                                <a class="nav-link" href="./maps/google.html">
-                                    <span class="sidebar-mini">GM</span>
-                                    <span class="sidebar-normal">Google Maps</span>
+                                <a class="nav-link" href="{% url 'post_list' %}">
+                                    <span class="sidebar-mini">PL</span>
+                                    <span class="sidebar-normal">Product List</span>
                                 </a>
                             </li>
                             <li class="nav-item ">
@@ -169,6 +176,12 @@
                     </a>
                 </li>
                 {% endif %}
+                <li class="nav-item text-center">
+                <a href="#" title=""  data-toggle="modal" data-target="#StoryModal" class="btn btn-light ">
+                   
+                    <b >POST</b>
+                  </a>
+                  </li>
             </ul>
 
       
@@ -301,6 +314,142 @@
 
 </body>
 
+
+<div class="modal fade" id="StoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close "data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" >&times;</span>
+          </button>
+        </div>
+  
+            <div class="container">
+              <div class="modal-body">
+              <ul class="form-tabs-bar  text-center">
+                <li id="tab1" class="form-tab form-tab-active btn btn-light btn-round "><i class="fa-solid fa-store"></i> </li>
+                <li id="tab2" class="form-tab btn btn-light btn-round "> <i class="fa-solid fa-hashtag "></i> </li>
+  
+              </ul>
+  
+              
+  
+              <div class="form-content-container mt-4 ">
+                <div class="form-content form-content-tab1 form-content-active">
+  
+                    <form method="post" enctype="multipart/form-data" class="post_form" id="product-form" accept-charset="UTF-8" action="{% url 'upload_product' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group mt-3 topic">
+                            {{ form.headline }}
+                        </div>
+                        <div class="form-group ml-2 topic ">
+                           Category: {{ form.category }}
+                          </div>
+                          <div class="form-group ml-2 topic ">
+                            {{ form.size }}
+                          </div>
+                          <div class="form-group ml-2 topic ">
+                            {{ form.max_price }}
+                          </div>
+                    
+                    
+                        
+                        <textarea type="text" name="body" class="form-control post-input"  placeholder="Your Post goes here ..." style="height: 180px;" ></textarea>
+                    
+                    
+                    <div class="word-count-progress ml-2 mr-2 mt-2 ">
+                    <div class="progress">
+                        <div class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="text-center mt-3"><span class="character-count grey">0/360</span></p>
+                    </div>
+                    <div class="col-12  ">
+                        <div class="row">
+                        
+                        <div class="form-group">
+                        <input type="file" id="id_sell_image" name="{{ form.image.name }}" class="file-input">
+                    
+                    </div>                       
+                      </div>
+                    
+                      <div class="sell-thumbnail-container">
+                        <button class=" btn btn-light  clear-sell-image-button" type="button"><i class="fa-solid fa-times"></i></button>
+                        <img id="sell_thumbnail" src="" alt="Thumbnail" style="max-width: 100%; height: 144px; ">
+                    
+                    </div>
+                    
+                      </div>
+                      <div id="uploaded_files"></div>
+                     <div class="alert alert-danger resmessage" style="display:none;"></div>
+                     <div class="row">
+                      <div class="mr-auto mt-2 ml-3">
+                        <label for="id_sell_image" class="file-label">
+                          <span class="icon">
+                            <img src="{% static 'img/icons/image.png'%}" alt="">
+                          </span> 
+                      </label>
+                      </div>
+                     <div class="ml-auto mt-3 mr-3">
+                      <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick ">Publish</button>
+                    </div>
+                    </div>
+                </form>
+  
+                </div>
+              </div>
+  
+              <div class="form-content-container ">
+                <div class="form-content form-content-tab2 ">
+                    <p class="text-center mt-2">New tag</p>
+                    <form method="post" enctype="multipart/form-data" class="post_form" id="tag-form" accept-charset="UTF-8" action="{% url 'upload_tag' %}" method="POST">
+                        {% csrf_token %}
+                       
+                        <div class="form-group ml-2 topic ">
+                           Category: {{ tag_form.category }}
+                          </div>
+
+                          <div class="form-group mt-3 topic">
+                            {{ tag_form.name }}
+                        </div>
+            
+                          <button type="submit" name="submit" class="btn btn-danger btn-round px-4 btnClick mt-2 ">Publish</button>
+
+                </form>
+                        
+                       
+                  
+                </div>
+  
+  
+              </div>
+  
+           
+                  </div>
+                  </div>
+  
+        <div class="modal-footer">
+         
+        </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content post-success" >
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <div class="modal-body mb-3">
+                <p id="successMessage" class="text-center">Your post was successful. </p>
+  
+            </div>
+           
+        </div>
+    </div>
+  </div>
 {% block scripts %}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -308,11 +457,199 @@
 <script src="{% static 'js/popper.min.js'%}"></script>
 
 <script src="{% static 'js/bootstrap.min.js'%}"></script>
+<script src="{% static 'js/progress.js'%}"></script>
 
 <script src="{% static 'js/dashboard.js'%}"></script>
 <script src="{% static 'js/reports.js'%}"></script>
 
 <script src="{% static 'js/charts/userschart.js'%}"></script>
+<script src="{% static 'js/app_scripts.js'%}"></script>
+<script src="{% static 'js/votes.js'%}"></script>
+<script src="{% static 'js/comment.js'%}"></script>
+
+  <script src="{% static 'js/comment_votes.js'%}"></script>
+
+<script>
+
+$('#product-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+        var imageInput = $('#id_sell_image')[0]; // Replace 'id_post_image' with the actual ID of the image input
+
+// Check if an image was selected
+        if (imageInput.files.length > 0) {
+    // Append the selected file to formData
+    formData.append('post_image', imageInput.files[0]);
+      }
+
+        var modal = $('#StoryModal'); 
+        var successModal = $('#successModal'); // Your success modal ID
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+
+        $.ajax({
+            url: '{% url "upload_product" %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    modal.modal('hide');
+                    $('#product-form')[0].reset();
+                    // Show the success modal
+                    successModal.modal('show');
+                    // Update the success message in the modal
+                    $('#successMessage').text(response.message);
+                    // Close the success modal after a certain delay (e.g., 3 seconds)
+                    setTimeout(function() {
+                        successModal.modal('hide');
+                    }, 3000); // 3000 milliseconds (3 seconds)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    }); 
+
+
+$('#tag-form').submit(function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+
+
+        var modal = $('#StoryModal'); 
+        var successModal = $('#successModal'); // Your success modal ID
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        });
+
+        $.ajax({
+            url: '{% url "upload_tag" %}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    modal.modal('hide');
+                    $('#tag-form')[0].reset();
+                    // Show the success modal
+                    successModal.modal('show');
+                    // Update the success message in the modal
+                    $('#successMessage').text(response.message);
+                    // Close the success modal after a certain delay (e.g., 3 seconds)
+                    setTimeout(function() {
+                        successModal.modal('hide');
+                    }, 3000); // 3000 milliseconds (3 seconds)
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    }); 
+
+    $(document).ready(function() {
+    // Function to get the CSRF token from the cookie
+    function getCSRFToken() {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, 'csrftoken'.length + 1) === 'csrftoken=') {
+                    cookieValue = decodeURIComponent(cookie.substring('csrftoken='.length));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $('#ProductEditModal').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // var formData = $(this).serialize();
+        var formData = new FormData();
+
+        // Log the serialized form data to the console for debugging
+        console.log(formData);
+
+        // Append other profile information
+        formData.append('id', $('#post_id').val());   
+        formData.append('headline', $('#id_headline').val());
+        formData.append('size', $('#id_size').val());
+        formData.append('max_price', $('#id_max_price').val());
+
+        formData.append('category', $('#id_category').val());
+        formData.append('body', $('#id_body').val());
+
+        // Get the CSRF token
+        var csrfToken = getCSRFToken();
+
+        if (csrfToken) {
+            // Add the CSRF token as a header
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '/update_post/', // Replace with your actual URL for profile update
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // Handle the success response
+                    displayMessage('Success', 'Post updated successfully');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000); // Reload the page after 2 seconds
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error response
+                    displayMessage('Error', 'Post update failed. Please check the form.');
+                }
+            });
+        }
+    });
+
+    function displayMessage(title, message) {
+        // Set the title and message in the modal
+        $('#messageModalLabel').text(title);
+        $('#messageText').text(message);
+
+        // Show the modal
+        $('#messageModal').modal('show');
+
+        // Automatically close the modal after 2 seconds
+        setTimeout(function() {
+            $('#messageModal').modal('hide');
+        }, 2000);
+    }
+})
+
+</script>
 
 {%endblock%}
   </html>

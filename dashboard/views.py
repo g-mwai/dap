@@ -16,13 +16,14 @@ from notifications.models import Alert
 from moderation.forms import *
 from django.db import transaction
 from .decorators import superuser_required  # Import the custom decorator
-
+from shops.models import *
+from posts.forms import ProductForm, TagForm
 
 @superuser_required
 def dashboard(request):
     # Retrieve the current user's profile
     my_profile = Profile.objects.get(user=request.user)
-
+    categories = Categories.choices  
     # Count the number of profiles, posts, and reports
     members_c = Profile.objects.count()
     posts_c = Post.objects.count()
@@ -43,13 +44,35 @@ def dashboard(request):
     
     # Calculate total earnings
     total_earnings = calculate_total_earnings()
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        tag_form = TagForm(request.POST)
 
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.post_type = 'product'
+            product.posted_by = request.user
+            product.save()
+            print("After setting post_type:", sell_post.post_type)
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        elif tag_form.is_valid():
+            tag = form.save(commit=False)
+            tag.save()
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+    else:
+        form = ProductForm()
+        tag_form = TagForm()
     context = {
         'my_profile': my_profile,
         'members_c': members_c,
         'posts_c': posts_c,
         'reports_c': reports_c,
         'total_earnings': total_earnings,
+        'categories': categories,
+        'form': form,
+        'tag_form': tag_form,
     }
 
     return render(request, 'dashboard/dashboard.html', context)

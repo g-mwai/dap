@@ -8,6 +8,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path("new_shop/", views.new_shop, name="new_shop"),
-   
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,7 +9,7 @@
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Buy Preloved Items</title>
+    <title>Together we Rise</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <!-- <link rel="stylesheet" href="{% static 'css/app_style.css'%}"> -->
+
 </head>
 
 <body>
@@ -69,9 +71,9 @@
                 </div>
                 <div class="col-xl-6 col-lg-7">
                     <div class="header__menu">
-                        <form class="form-inline shop-search  my-2 my-lg-0 col-12">
-                                <input class="form-control " type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-light  text-dark my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass mr-1"></i> </button>
+                        <form class="form-inline shop-search  my-2 my-lg-0 col-12" action="{% url 'search_results' %}" method="GET" value="{{request.GET.q}}">
+                                <input class="form-control search-input" type="search" placeholder="Search Soconey" aria-label="Search" aria-describedby="search-addon" name="q" value="{{request.GET.q}}" >
+                                <button class="btn btn-outline-light  text-dark my-2 my-sm-0" name="submit" type="submit"><i class="fa-solid fa-magnifying-glass mr-1"></i> </button>
                        </form>
                             
                     </div>
@@ -79,10 +81,10 @@
                 <div class="col-lg-3">
 
                     <div class="header__right">
-                       <a href="#" class="mr-3 com_icon text-dark"><img src="{% static 'img/icons/love.png' %}"> <small>Community</small></a>
+                       <a href="{% url 'landing_page' %}" class="mr-3 com_icon text-dark"><img src="{% static 'img/icons/community.png' %}"> <small>Community</small></a>
 
                        <div class="header__right__auth ">
-                        <a href="#" class="btn btn-outline-danger px-3">Login</a>
+                        <a href="#" class="btn btn-outline-danger px-3">Login <i class="fa-solid fa-unlock-keyhole ml-1"></i></a>
                     </div>
                         <ul class="header__right__widget ">
                             <li><span class="icon_search search-switch"></span></li>
@@ -118,6 +120,7 @@
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                     cilisis.</p>
+                    <p>Made with <i class="fa fa-heart" aria-hidden="true"></i> from <a href="#" target="_blank"></a>Nairobi</p>
                     <div class="footer__payment">
                         <a href="#"><img src="img/payment/payment-1.png" alt=""></a>
                         <a href="#"><img src="img/payment/payment-2.png" alt=""></a>
@@ -170,7 +173,7 @@
             <div class="col-lg-12">
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 <div class="footer__copyright__text">
-                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
+                    <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> .Soconey Labs . All rights reserved </p>
                 </div>
                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
             </div>
@@ -202,6 +205,8 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/jquery.nicescroll.min.js"></script>
 <script src="js/main.js"></script>
+<script src="{% static 'js/votes.js'%}"></script>
+
 </body>
 
 </html>

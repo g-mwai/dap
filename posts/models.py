@@ -35,7 +35,7 @@ class Industries(models.TextChoices):
 
 class PostType(models.TextChoices):
     THREAD = 'thread', 'Thread'
-    BET = 'bet', 'Bet'
+    PRODUCT = 'product', 'Product'
     BLOG = 'blog', 'Blog'
     SELL = 'sell', 'Sell'
     PROJECT = 'project', 'Project'
@@ -46,7 +46,8 @@ class SellType(models.TextChoices):
     DIGITAL = 'digital', 'Digital'
     EVENT = 'event', 'Event'
     FUNDRAISER = 'fundraiser', 'Fundraiser'
-  
+    UNCATEGORIZED = 'uncategorized', 'Uncategorized'
+
 class CTA(models.TextChoices):
     BUY  = 'buy now', 'Buy Now'
     CONTACT = 'contact', 'Contact'
@@ -68,16 +69,14 @@ class Progress(models.TextChoices):
     COMPLETED= 'completed', 'Completed'
     STARTING_SOON= 'starting soon', 'Starting Soon'
 
+class Categories(models.TextChoices):
+    CLOTHING = 'clothing', 'Clothing'
+    GITFS = 'gifts', 'Gifts'
+    ACCESORIES = 'accessories', 'Accessories'
+    ELECTRONICS = 'electronics', 'Electronics'
+    MOMBABY = 'Mom & Baby', 'Mom & baby'
+    UNCATEGORIZED = 'uncategorized', 'Uncategorized'
 
-class Tag(models.Model):
-    name = models.CharField(max_length=55)
-    industry = models.CharField(
-        max_length=50,
-        choices=Industries.choices,
-        default=Industries.UNCATEGORIZED
-    ) 
-    def __str__(self):
-        return self.name
 
 class View(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='views')
@@ -88,10 +87,20 @@ class View(models.Model):
     def view_count(self):
         return self.views.count()
 
+class Tag(models.Model):
+    name = models.CharField(max_length=55)
+    category = models.CharField(
+        max_length=50,
+        choices=Categories.choices,
+        default=Categories.UNCATEGORIZED
+    )
+
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     post_image = models.ImageField(upload_to='post_images/', null=True, blank=True)
-    tags = models.ManyToManyField(Tag, blank=True, related_name="topic_tags")
+    tags = models.ManyToManyField(Tag, blank=True, related_name="post_tags", symmetrical=False)
     identifier = models.UUIDField(default=uuid.uuid4, editable=False)
     progress = models.CharField(
         max_length=50,
@@ -109,15 +118,21 @@ class Post(models.Model):
     sell_type = models.CharField(
         max_length=50,
         choices=SellType.choices,
-        default=SellType.PRODUCT
+        default=SellType.UNCATEGORIZED
     ) 
     post_type = models.CharField(
         max_length=50,
         choices=PostType.choices,
         default=PostType.THREAD
     )  
+    category = models.CharField(
+        max_length=50,
+        choices=Categories.choices,
+        default=Categories.UNCATEGORIZED
+    )
     is_pinned = models.BooleanField(default=False)
     closing_date = models.DateField(default=date.today)
+    size = models.CharField(max_length=55)
 
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, blank=True, related_name="liked_posts", symmetrical=False)
@@ -328,7 +343,14 @@ class Post(models.Model):
 
 
 
-
+class ProductImage(models.Model):
+    image = models.ImageField(
+         upload_to="post_img/", null=True, blank=True
+    )
+    post = models.ForeignKey(
+        Post, related_name="prod_img", on_delete=models.CASCADE
+    )
+   
 
 class Option(models.Model):
     option_image = models.ImageField(upload_to='post_images/', null=True, blank=True)

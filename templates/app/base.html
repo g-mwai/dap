@@ -125,10 +125,10 @@
 
       <a href="{% url 'view_alerts'%}" class="sidebar-link sidebar__link {% if request.path == '/alerts/' %}active-nav{% endif %}" id="alerts-link"><div class="sidebar__link">
         <span class="sidebar-icons ml-2">
-      <img src="{% static 'img/icons/notification.png'%}"/></span> {% csrf_token %}       
+      <img src="{% static 'img/icons/chats.png'%}"/></span> {% csrf_token %}       
 
 
-      <span class="pt-2 "><h2>Alerts</h2> </span> <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
+      <span class="pt-2 "><h2>Inbox</h2> </span> <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
       </div></a>
 
       <a href="{% url 'booking'%}" class="sidebar-link sidebar__link {% if request.path == '/booking/' %}active-nav{% endif %}"><div class="sidebar__link">
@@ -160,10 +160,10 @@
 
       <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/alerts/' %}active-nav{% endif %}" id="alerts-link"><div class="sidebar__link">
         <span class="sidebar-icons ml-2">
-      <img src="{% static 'img/icons/notification.png'%}"/></span> {% csrf_token %}       <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
+      <img src="{% static 'img/icons/chats.png'%}"/></span> {% csrf_token %}       <div class="notis-badge"> {% if alerts_c > 0 %}<span class="badge badge-pill badge-danger alert-badge "  id="alert-count-badge"> <small><b>1</b></small></span>{% endif %}</div>
 
 
-      <span class="pt-2 ml-2"><h2>Alerts</h2> </span> 
+      <span class="pt-2 ml-2"><h2>Inbox</h2> </span> 
       </div></a>
 
       <a data-toggle="modal" data-target="#loginModal" href="#" class="sidebar-link sidebar__link {% if request.path == '/bookmark_list/' %}active-nav{% endif %}"><div class="sidebar__link">
@@ -197,7 +197,7 @@
         </a>
          <div class="dropdown-menu dropdown-menu-right">
                 
-           <a href="{% url 'bookmark_list'%}" class="dropdown-item  btn btn-light btn-lg btn-round  {% if request.path == '/bookmark_list/' %}active-nav{% endif %}" ><i class="fa-regular fa-star mr-2"></i> Collection </a>       
+           <a href="{% url 'bookmark_list'%}" class="dropdown-item  btn btn-light btn-lg btn-round  {% if request.path == '/bookmark_list/' %}active-nav{% endif %}" ><i class="fa-solid fa-bookmark mr-2"></i> Saved </a>       
            <a href="{% url 'settings'%}" class="dropdown-item  btn btn-light btn-lg btn-round  {% if request.path == '/settings/' %}active-nav{% endif %}"><i class="fa-solid fa-sliders mr-2"></i> Settings </a>       
            <a href="{% url 'logout'%}" class="dropdown-item  btn btn-light btn-lg btn-round "><i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Logout </a>       
 
@@ -820,7 +820,7 @@
               <li id="tab1" class="form-tab form-tab-active btn btn-light btn-round grey"><i class="fa-solid fa-hashtag "></i></li>
               <li id="tab2" class="form-tab btn btn-light btn-round grey"> <i class="fa-solid fa-store"></i></li>
               <li id="tab3" class="form-tab btn btn-light btn-round grey"><i class="fa-solid fa-briefcase"></i></li>
-              <li id="tab4" class="form-tab btn btn-light btn-round grey"><i class="fa-solid fa-landmark"></i></li>
+              <!-- <li id="tab4" class="form-tab btn btn-light btn-round grey"><i class="fa-solid fa-landmark"></i></li> -->
 
             </ul>
 
@@ -1067,12 +1067,11 @@
 
             </div>
 
-            <div class="form-content-container ">
+            <!-- <div class="form-content-container ">
               <div class="form-content form-content-tab4 ">
 
                 <form class="post_form" accept-charset="UTF-8" action="{% url 'upload_project' %}" method="POST" enctype="multipart/form-data" id="project-form">
                   {% csrf_token %}
-                  <!-- {{ form.as_p }} -->
                   <p class="orange text-center"><small>Post a project</small></p>
 
                   
@@ -1155,7 +1154,7 @@
 
 
 
-            </div>
+            </div> -->
 
                 </div>
                 </div>

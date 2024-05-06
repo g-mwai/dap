@@ -10,49 +10,65 @@
                     <div class="col-md-12">
                         <div class="card ">
                             <div class="card-header row">
-                                <h4 class="card-title ml-3">Articles</h4>
-                                <a class="btn btn-success ml-3" href="#">New Post</a>
+                                <h4 class="card-title ml-3">Products</h4>
 
                             
                             </div>
                             <div class="card-body ">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover">
-                                                <thead class="thead-dark">
-                                                  <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">username</th>
-                                                    <th scope="col">Views</th>
-                                                    <th scope="col">Likes</th>
-                                                    <th scope="col">activity</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  <tr>
-                                                    <th scope="row">AD51</th>
-                                                    <td>Le Something</td>
-                                                    <td>43</td>
-                                                    <td>30</td>
-                                                    <td class="text-primary">4%</td>
-                                                  </tr>
+                              <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="table-responsive">
+                                      <table class="table table-hover">
+                                          <thead class="thead-dark">
+                                              <tr>
+                                                <th scope="col">Headline</th>
+
+                                                  <th scope="col">Author</th>
+                                                  <th scope="col">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              {% for post in posts %}
                                               
-                                                  <tr>
-                                                    <th scope="row">AD51</th>
-                                                    <td>Le Something</td>
-                                                    <td>43</td>
-                                                    <td>27</td>
-                                                    <td class="text-primary">10%</td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                             
-                                            </div>
-                                            </div>
-                                         
-                                            </div>
-                                            </div>
+                                              <tr>
+                                                <td>{{ post.headline|slice:":10" }}</td>
+
+                                                  <td>{{ post.posted_by.username }}</td>
+                                                  <td class="text-primary"><a href="{% url 'edit_post' post.id %}" class="btn btn-primary">View</a></td>
+                                                  
+                                              </tr>
+                                              {% endfor %}
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                  
+                                  <!-- Pagination links -->
+                                  {% if posts.has_other_pages %}
+                                  <ul class="pagination">
+                                      {% if posts.has_previous %}
+                                          <li class="page-item"><a class="page-link" href="?post_page={{ posts.previous_page_number }}">Previous</a></li>
+                                      {% else %}
+                                          <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                                      {% endif %}
+                                      {% for num in posts.paginator.page_range %}
+                                          {% if posts.number == num %}
+                                              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                          {% else %}
+                                              <li class="page-item"><a class="page-link" href="?post_page={{ num }}">{{ num }}</a></li>
+                                          {% endif %}
+                                      {% endfor %}
+                                      {% if posts.has_next %}
+                                          <li class="page-item"><a class="page-link" href="?post_page={{ posts.next_page_number }}">Next</a></li>
+                                      {% else %}
+                                          <li class="page-item disabled"><span class="page-link">Next</span></li>
+                                      {% endif %}
+                                  </ul>
+                              {% endif %}
+                                  
+                                          </div>
+                                       
+                                          </div>
+                                          </div>
                                             </div>
                                             </div>
                                         </div>

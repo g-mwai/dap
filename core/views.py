@@ -29,6 +29,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.utils.dateparse import parse_date
 from posts.exceptions import InsufficientFundsError
+from django.core.paginator import Paginator
 
 from allauth.socialaccount.providers.oauth2.views import OAuth2CallbackView
 from allauth.socialaccount.models import SocialAccount, SocialToken
@@ -83,9 +84,7 @@ def home(request):
             res = {'success': True, 'message': 'Post submitted successfully.'}
             return JsonResponse(res)
         elif sell_form.is_valid():
-            # Add debugging output to inspect the form data and attributes
-            print("Sell form data:", sell_form.cleaned_data)
-            print("Before setting post_type:", sell_form.instance.post_type)
+           
             sell = sell_form.save(commit=False)
             sell.post_type = 'sell'
             sell.posted_by = request.user
@@ -329,7 +328,9 @@ def upload_sell(request):
     # Handle GET or other HTTP methods
     response_data = {'success': False, 'message': 'Invalid request method.'}
     return JsonResponse(response_data)
-         
+
+
+      
 @login_required
 def report_bug(request):
     profile = request.user.profile
@@ -435,6 +436,30 @@ def update_profile(request):
 
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
+@require_POST
+def update_post(request,):
+    if request.method == 'POST':
+        # Get the post ID from the POST request
+        post_id = request.POST.get('id')
+        
+        # Fetch the corresponding Post instance
+        post_detail = get_object_or_404(Post, id=post_id)
+        # Update other profile information
+        post_detail.headline = request.POST.get('headline', '')
+        post_detail.size = request.POST.get('size', '')
+        post_detail.category = request.POST.get('category', '')
+
+        post_detail.body = request.POST.get('body', '')
+        post_detail.max_price = request.POST.get('max_price', '')
+
+        # Save the updated profile
+        post_detail.save()
+
+        return JsonResponse({'message': 'Post updated successfully.'})
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
 @login_required
 def post_search(request):
     query = request.GET.get('q')
@@ -488,6 +513,7 @@ def post_search(request):
         threads = Post.objects.filter(body__icontains=query, post_type="thread")
         deals = Post.objects.filter(body__icontains=query, post_type="sell")
         projects = Post.objects.filter(body__icontains=query, post_type="project")
+        products = Post.objects.filter(body__icontains=query, post_type="product")
 
         # Search for gigs
         gigs_results = Gig.objects.filter(title__icontains=query)
@@ -502,7 +528,7 @@ def post_search(request):
         'query': query,
         'threads': threads,
         'deals': deals,
-        'projects': projects,
+        'products': products,
         'post_form': post_form,
         'gig_form' : gig_form,
         'sell_form' : sell_form,
@@ -510,6 +536,7 @@ def post_search(request):
 
     }
     return render(request, 'search/search.html', context)
+
 
 # @login_required
 # def follow_user(request):
@@ -988,6 +1015,51 @@ def edit_account(request):
 
     return render(request, 'profiles/edit_account.html', context)
 
+@login_required
+def post_list(request):
+  
+    posts = Post.objects.filter(post_type='product')
+     # Paginate the reported posts
+    post_paginator = Paginator(posts, 8)
+    post_page_number = request.GET.get('post_page')
+    posts_obj = post_paginator.get_page(post_page_number)
+
+    context = {
+        # 'form': form,
+        'posts': posts_obj,
+    }
+
+    return render(request, 'dashboard/post_list.html', context)
+
+
+
+@login_required
+def edit_post(request, id):
+    my_profile = Profile.objects.get(user=request.user)
+
+    post_detail = get_object_or_404(Post, id=id)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=post_detail)
+        if form.is_valid():
+
+            form.save()
+            messages.success(request, 'Your post has been updated successfully')
+
+
+            return redirect(dashboard)  
+    else:
+        form = ProductForm(instance=post_detail)
+        messages.error(request, 'Profile update failed. Please check the form.')
+    context = {
+        'form': form,
+        'my_profile': my_profile,
+        'post_detail':post_detail,
+    }
+
+    return render(request, 'dashboard/edit_post.html', context)
+
+
 
 def toggle_pin(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -1392,6 +1464,8 @@ def post_detail(request, identifier):
     post_comments = Comment.objects.filter(parent_post=post_detail)
     comment_counter = post_comments.count()
     random_industries = Industries.choices
+    random_categories = Categories.choices
+
      # Check if the user has already viewed this post
     if not View.objects.filter(post=post_detail, viewer=request.user).exists():
         # If not, create a new view record
@@ -1455,7 +1529,9 @@ def post_detail(request, identifier):
      'post_comments':post_comments,
      'new_comment_form': new_comment_form,
      'comment_counter':comment_counter,
-     'random_industries' : random_industries
+     'random_industries' : random_industries,
+     'random_categories' : random_categories,
+
    }
     # view_post(request, id)
 
@@ -1650,6 +1726,75 @@ def industry_filter(request, industry):
         }
     return render(request, 'filters/industry_posts.html', context)
 
+
+@login_required
+def tag_filter(request, tag):
+    user = request.user
+    my_profile = Profile.objects.get(user=user)
+    filtered_posts = Post.objects.filter(industry=industry)
+    threads = Post.objects.filter(post_type="thread", industry=industry)
+
+
+    random_industries = Industries.choices
+
+    if request.method == 'POST':
+        post_form = PostForm(request.POST, request.FILES)
+        gig_form = GigForm(request.POST, request.FILES)
+        sell_form = SellForm(request.POST, request.FILES)
+        project_form = ProjectForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.posted_by = request.user
+            post.save()
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        elif gig_form.is_valid():
+            gig = gig_form.save(commit=False)
+            gig.posted_by = request.user
+            gig.save()
+            res = {'success': True, 'message': 'Gig submitted successfully.'}
+            return JsonResponse(res)
+        elif project_form.is_valid():
+            project = project_form.save(commit=False)
+            project.posted_by = request.user
+            project.save()
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        elif sell_form.is_valid():
+            # Add debugging output to inspect the form data and attributes
+            print("Sell form data:", sell_form.cleaned_data)
+            print("Before setting post_type:", sell_form.instance.post_type)
+            sell = sell_form.save(commit=False)
+            sell.post_type = 'sell'
+            sell.posted_by = request.user
+            sell.save()
+            print("After setting post_type:", sell_post.post_type)
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        else:
+            res = {'success': False, 'message': 'Form data is invalid.'}
+            return JsonResponse(res)
+    else:
+        post_form = PostForm()
+        gig_form = GigForm()
+        sell_form = SellForm()
+        project_form = ProjectForm()
+
+    context ={
+        'filtered_posts': filtered_posts,
+        'filtered_gigs': filtered_gigs,
+        'post_form': post_form,
+        'gig_form' : gig_form,
+        'sell_form' : sell_form,
+        'project_form' : project_form,
+        'industry': industry,
+        
+        'my_profile': my_profile,
+        'random_industries': random_industries
+        }
+    return render(request, 'filters/tag_filter.html', context)
+
+
 @login_required
 def industry_list(request):
     user = request.user
@@ -1709,6 +1854,71 @@ def industry_list(request):
 
         }
     return render(request, 'filters/industry_list.html', context)
+
+
+
+def category_filter(request, category):
+    user = request.user
+    my_profile = Profile.objects.get(user=user)
+    filtered_posts = Post.objects.filter(category=category)
+
+    random_categories = Categories.choices
+
+    if request.method == 'POST':
+        post_form = PostForm(request.POST, request.FILES)
+        gig_form = GigForm(request.POST, request.FILES)
+        sell_form = SellForm(request.POST, request.FILES)
+        project_form = ProjectForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.posted_by = request.user
+            post.save()
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        elif gig_form.is_valid():
+            gig = gig_form.save(commit=False)
+            gig.posted_by = request.user
+            gig.save()
+            res = {'success': True, 'message': 'Gig submitted successfully.'}
+            return JsonResponse(res)
+        elif project_form.is_valid():
+            project = project_form.save(commit=False)
+            project.posted_by = request.user
+            project.save()
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        elif sell_form.is_valid():
+            # Add debugging output to inspect the form data and attributes
+            print("Sell form data:", sell_form.cleaned_data)
+            print("Before setting post_type:", sell_form.instance.post_type)
+            sell = sell_form.save(commit=False)
+            sell.post_type = 'sell'
+            sell.posted_by = request.user
+            sell.save()
+            print("After setting post_type:", sell_post.post_type)
+            res = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(res)
+        else:
+            res = {'success': False, 'message': 'Form data is invalid.'}
+            return JsonResponse(res)
+    else:
+        post_form = PostForm()
+        gig_form = GigForm()
+        sell_form = SellForm()
+        project_form = ProjectForm()
+
+    context ={
+        'posts': filtered_posts,
+        'post_form': post_form,
+        'gig_form' : gig_form,
+        'sell_form' : sell_form,
+        'project_form' : project_form,
+        'category': category,
+        'my_profile': my_profile,
+        'random_categories,': random_categories,
+        }
+    return render(request, 'shop/category_filter.html', context)
+
 
 
 def xp_filter(request, experience):
@@ -2103,7 +2313,7 @@ def booking(request):
 
 
 def landing(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(post_type="product")
 
     form = LoginForm(request, data=request.POST)
     signup_form = NewUserForm(request.POST)
@@ -2135,6 +2345,41 @@ def landing(request):
         "posts": posts,
     }
     return render (request, 'shop/shop.html', context )
+
+
+def landing_page(request):
+    posts = Post.objects.filter(post_type="product")
+
+    form = LoginForm(request, data=request.POST)
+    signup_form = NewUserForm(request.POST)
+    if request.method == "POST":
+        if signup_form.is_valid():
+            user = signup_form.save()
+            login(request, user)
+            messages.success(request, "Registration successful." )
+            return redirect(edit_profile)
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Welcome, you are now logged in as {username}.")
+                return redirect("home")
+            else:
+                messages.error(request,"Invalid username or password.")
+        else:
+            messages.error(request,"Invalid username or password.")
+    form = LoginForm()
+    signup_form = NewUserForm()
+    context ={
+        "login_form": form,
+        "signup_form": signup_form,
+        "posts": posts,
+    }
+    return render (request, 'landing/index.html', context )
 
 
 def delete_post(request, post_id):
@@ -2240,8 +2485,10 @@ def fofo(request):
 
 
 def dashboard(request):
+    
+    
     context = {
-
+    'form': form,
     }
 
     return render (request, 'dashboard/dashboard.html', context )
@@ -2252,3 +2499,60 @@ def manifesto(request):
     }
 
     return render (request, 'secondary/manifesto.html', context )
+
+
+
+def upload_product(request):
+    if request.method == 'POST':
+       
+        user = request.user
+        headline = request.POST.get('headline')
+        size = request.POST.get('size')
+        max_price = request.POST.get('max_price')
+
+        body = request.POST.get('body')
+        post_type = "product"
+        post_image = request.FILES.get('post_image')
+        if headline  and size and max_price and body:
+            new_post = Post(
+                post_type = post_type,
+                body=body,
+                size=size,
+                headline=headline,
+                max_price = max_price,
+                post_image=post_image,  # This is the image field in your Post model
+                posted_by=request.user  # Assuming you're using Django's built-in User model
+            )
+           
+            new_post.save()  # This will automatically deduct coins if the post type is 'thread'
+            response_data = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(response_data)
+        else:
+            response_data = {'success': False, 'message': 'Invalid form data.'}
+            return JsonResponse(response_data)
+
+    # Handle GET or other HTTP methods
+    response_data = {'success': False, 'message': 'Invalid request method.'}
+    return JsonResponse(response_data)
+   
+def upload_tag(request):
+    if request.method == 'POST':
+       
+        name = request.POST.get('name')
+        if name:
+            new_tag = Tag(
+                name=name,
+                # Assuming you're using Django's built-in User model
+            )
+           
+            new_tag.save()  # This will automatically deduct coins if the post type is 'thread'
+            response_data = {'success': True, 'message': 'Post submitted successfully.'}
+            return JsonResponse(response_data)
+        else:
+            response_data = {'success': False, 'message': 'Invalid form data.'}
+            return JsonResponse(response_data)
+
+    # Handle GET or other HTTP methods
+    response_data = {'success': False, 'message': 'Invalid request method.'}
+    return JsonResponse(response_data)
+   

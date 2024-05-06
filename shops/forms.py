@@ -34,12 +34,30 @@ class NewShopForm(ModelForm):
         fields = ('industry', 'name', 'username', 'ext_link', 'bio')
 
 
-# class ServiceForm(ModelForm):
+class TagForm(forms.ModelForm):
+    category= forms.ChoiceField(choices=Categories.choices, label="Category")
 
+    class Meta:
+        model = Tag
+        fields = ('name','category' )
+
+
+# class ProductForm(forms.ModelForm):
+#     headline = forms.CharField(
+#         widget=forms.TextInput(attrs={'class': 'profile-edit', 'placeholder': 'Headline'}),
+#         label=False
+#     )
+#     size = forms.CharField(
+#         widget=forms.TextInput(attrs={'class': 'profile-edit', 'placeholder': 'Size'}),
+#         label=False
+#     )
+#     description = forms.CharField(
+#         widget=forms.Textarea(attrs={'class': 'post-input', 'placeholder': 'Product Description'}),
+#         label=False
+#     )
 #     class Meta:
-#         model = Service
-#         fields = ('name','price_low', 'price_up' )
-
+#         model = Product
+#         fields = ['headline', 'description', 'sale_price', 'size', 'image']
 
 class LocationForm(ModelForm):
 

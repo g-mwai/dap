@@ -5,69 +5,12 @@
 
     <!-- Categories Section Begin -->
    <div class="spacer"></div>
-    <section class="categories ">
-        <div class="container-fluid">
-            <div class="row ">
-                  <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg"
-                    data-setbg="{% static 'img/womens.jpg' %}">
-                    <div class="categories__text">
-                        
-                        <h4>clothing <i class="fa-solid fa-caret-down  ml-1"></i> </h4> 
-                       
-                        <a href="{% url 'category_filter' 'clothing' %}" class="btn btn-outline-dark  px-3 py-1 mt-3">Shop now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/gifts.jpg' %}">
-                            <div class="categories__text">
-                                <h4>Gifts <i class="fa-solid fa-caret-down  ml-1"></i> </h4> 
-                                <!-- <p>358 items</p> -->
-                                <a href="{% url 'category_filter' 'gifts' %}" class="btn btn-outline-dark  px-3 py-1 mt-3">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/accessory.jpg' %}">
-                            <div class="categories__text">
-                                <h4 >Accessories <i class="fa-solid fa-caret-down  ml-1"></i> </h4> 
-                                <!-- <p class="">273 items</p> -->
-                                <a href="{% url 'category_filter' 'accessories' %}" class="btn btn-outline-dark  px-3 py-1 mt-3">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/electro.jpg' %}">
-                            <div class="categories__text">
-                                <h4>Electronics <i class="fa-solid fa-caret-down  ml-1"></i> </h4> 
-                                <!-- <p>159 items</p> -->
-                                <a href="{% url 'category_filter' 'electronics' %}" class="btn btn-outline-dark  px-3 py-1 mt-3">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/mombaby.jpg' %}">
-                            <div class="categories__text">
-                                <h4>Mom & Baby <i class="fa-solid fa-caret-down  ml-1"></i> </h4> 
-                                <!-- <p>792 items</p> -->
-                                <a href="{% url 'category_filter' 'mom & baby' %}" class="btn btn-outline-dark  px-3 py-1 mt-3">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Categories Section End -->
+    
 
 <!-- Product Section Begin -->
 <section class="product spad">
     <div class="container">
-        <h3>Featured</h3>
+        <h3>{{category | capfirst}}</h3>
 
         <div class=" row mt-3">
 
@@ -214,46 +157,7 @@
 
 
 
-<!-- Discount Section Begin -->
-<section class="discount">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 p-0">
-                <div class="discount__pic">
-                    <img src="img/discount.jpg" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6 p-0">
-                <div class="discount__text">
-                    <div class="discount__text__title">
-                        <span>Discount</span>
-                        <h2>Summer 2019</h2>
-                        <h5><span>Sale</span> 50%</h5>
-                    </div>
-                    <div class="discount__countdown" id="countdown-time">
-                        <div class="countdown__item">
-                            <span>22</span>
-                            <p>Days</p>
-                        </div>
-                        <div class="countdown__item">
-                            <span>18</span>
-                            <p>Hour</p>
-                        </div>
-                        <div class="countdown__item">
-                            <span>46</span>
-                            <p>Min</p>
-                        </div>
-                        <div class="countdown__item">
-                            <span>05</span>
-                            <p>Sec</p>
-                        </div>
-                    </div>
-                    <a href="#">Shop now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 <!-- Discount Section End -->
 
 <!-- Services Section Begin -->

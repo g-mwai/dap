@@ -20,7 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+from django.shortcuts import render, redirect
 
 @login_required
 def new_shop(request):
@@ -34,3 +34,6 @@ def new_shop(request):
      'service_form': service_form,
    }
     return render (request, 'posts/new_shop.html', context )
+
+
+

@@ -1,38 +1,25 @@
 from django.db import models
 from posts.models import Industries
 from django_countries.fields import CountryField
-
+from posts.models import Tag
 from django.conf import settings
 User = settings.AUTH_USER_MODEL
 import uuid
 
+
+class Categories(models.TextChoices):
+    CLOTHING = 'Clothing', 'Clothing'
+    GITFS = 'gifts', 'Gifts'
+    ACCESORIES = 'accessories', 'Accessories'
+    ELECTRONICS = 'electronics', 'Electronics'
+    DECOR = 'decor', 'Decor'
+
+
 class Service(models.Model):
     pass
 
-class Product(models.Model):
-    name = models.CharField(max_length=55)
-    category = models.CharField(
-        max_length=50,
-        choices=Industries.choices,
-        default=Industries.UNCATEGORIZED
-    ) 
-    about = models.TextField(max_length=10000) 
-    dis_price = models.IntegerField(default=0)
-    sale_price = models.IntegerField(default=0)
-    image = models.ImageField(
-         upload_to="product_img/", null=True, blank=True
-    )
-    def __str__(self):
-        return self.name
 
-class ProductImage(models.Model):
-    image = models.ImageField(
-         upload_to="product_img/", null=True, blank=True
-    )
-    product = models.ForeignKey(
-        Product, related_name="product_img", on_delete=models.CASCADE
-    )
-    
+
 class Location(models.Model):
     name = models.CharField(max_length=55)
     
@@ -71,7 +58,8 @@ class Shop(models.Model):
     )
     
     ext_link = models.URLField(max_length=200, blank=True)
- 
+
+
 class Review(models.Model):
 
     review_by = models.ForeignKey(
@@ -276,3 +264,4 @@ class ReviewReply(models.Model):
 
     def __str__(self):
         return self.related_comment
+

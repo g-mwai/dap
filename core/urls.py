@@ -12,10 +12,15 @@ urlpatterns = [
     path("home/", views.home, name="home"),
     # path("home/view_post", views.view_post, name="view_post"),
     path("upload_post/", views.upload_post, name="upload_post"),
+    path("landing_page/", views.landing_page, name="landing_page"),
+
     path("upload_project/", views.upload_project, name="upload_project"),
 
     path("upload_gig/", views.upload_gig, name="upload_gig"),
     path("upload_sell/", views.upload_sell, name="upload_sell"),
+    path("upload_product/", views.upload_product, name="upload_product"),
+    path("upload_tag/", views.upload_tag, name="upload_tag"),
+
     path("report/", views.report_post, name="report_post"),
     path("report_gig/", views.report_gig, name="report_gig"),
     path("report_bug/", views.report_bug, name="report_bug"),
@@ -50,6 +55,8 @@ urlpatterns = [
     path('upload_cover/', views.upload_cover, name='upload_cover'),
 
     path('update_profile/', views.update_profile, name='update_profile'),
+    path('update_post/', views.update_post, name='update_post'),
+
     path('delete_avatar/', views.delete_avatar, name='delete_avatar'),
     path('delete_cover/', views.delete_cover, name='delete_cover'),
 
@@ -77,6 +84,7 @@ urlpatterns = [
     path("@<str:profile_username>/following", views.follow_list, name="follow_list"),
     # path("like/<int:post_id>/",views.like_toggle, name="like_toggle"),
     path("search/", views.post_search, name="search_results"),
+    
     # path('private-chat/<int:other_user_id>/', views.private_chat_view, name='private_chat'),
     path('alerts/', views.view_alerts, name='view_alerts'),
     path('market/', views.market, name='market'),
@@ -91,6 +99,8 @@ urlpatterns = [
     path("bookmark_list/", views.bookmark_list, name="bookmark_list"),
     path('posts/<int:post_id>/toggle_bookmark/', views.toggle_bookmark, name='toggle_bookmark'),
     path('posts/<int:comment_id>/toggle_comment_bookmark/', views.toggle_comment_bookmark, name='toggle_comment_bookmark'),
+    path('products/', views.post_list, name='post_list'),
+    path("edit_post/<int:id>/", views.edit_post, name="edit_post"),
 
     # path("profile/", views.profile, name="profile"),
     path('posts/<int:post_id>/toggle_repost/', views.toggle_repost, name='toggle_repost'),
@@ -102,6 +112,8 @@ urlpatterns = [
     # topic filter
     path('i/<str:industry>/', views.industry_filter, name='industry_filter'),
     path('pol/<str:policy>/', views.policy, name='policy'),
+    path('c/<str:category>/', views.category_filter, name='category_filter'),
+    path('t/<str:tag>/', views.tag_filter, name='tag_filter'),                      
 
     # xp filters
     path('xp/entry level/', views.xp_filter, {'experience': 'entry level'}, name='xp_entry level'),
